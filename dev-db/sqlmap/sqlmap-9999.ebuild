@@ -19,6 +19,7 @@ DESCRIPTION="Automatic SQL injection and database takeover tool "
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 IUSE="ntlm"
 
 DEPEND=""
