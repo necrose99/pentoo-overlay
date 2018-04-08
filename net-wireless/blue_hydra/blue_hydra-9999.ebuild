@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,27 +9,27 @@ SRC_URI=""
 
 LICENSE="BSD-4"
 SLOT="0"
-USE_RUBY="ruby21 ruby22 ruby23 ruby24"
+USE_RUBY="ruby23 ruby24"
 inherit ruby-ng
 
 if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	KEYWORDS=""
-	EGIT_REPO_URI="https://github.com/pwnieexpress/blue_hydra.git"
+	EGIT_REPO_URI="https://github.com/zerochaos-/blue_hydra.git"
 	EGIT_CHECKOUT_DIR="${WORKDIR}"/all
 else
 	KEYWORDS="amd64 x86 arm"
-	#strictly speaking this isn't a blue_hydra version number but the Pwnie Express software release number
+	#strictly speaking this isn't a blue_hydra version number but a random simulation of a Pwnie Express software release number
 	#but close enough for pushing out stable releases
-	SRC_URI="https://github.com/pwnieexpress/blue_hydra/archive/${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/zerochaos-/blue_hydra/archive/${PV}.tar.gz -> ${P}.tar.gz"
 fi
 
 IUSE="development ubertooth"
 
 DEPEND=""
 PDEPEND="dev-python/dbus-python
-	 net-wireless/bluez[test-programs]
-	 ubertooth? ( net-wireless/ubertooth )"
+		 net-wireless/bluez-5.46[test-programs,deprecated(+)]
+		 ubertooth? ( net-wireless/ubertooth )"
 
 test_deps="dev-ruby/rake dev-ruby/rspec:*"
 ruby_add_bdepend "dev-ruby/bundler
@@ -63,6 +63,7 @@ all_ruby_prepare() {
 	if ! use test && ! use development; then
 		sed -i -e "/^group :test, :development do/,/^end$/d" Gemfile || die
 	fi
+	sed -i -e '/simplecov/I s:^:#:' spec/spec_helper.rb || die
 }
 
 each_ruby_prepare() {

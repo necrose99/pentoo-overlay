@@ -1,8 +1,8 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 inherit git-r3
 
@@ -27,8 +27,9 @@ PDEPEND="dev-util/dialog
 	sys-boot/efibootmgr
 	|| ( sys-boot/grub:0
 	     sys-boot/grub-static:0 )
-	sys-boot/grub:2
+	sys-boot/grub:2[multislot(-)]
 	sys-boot/os-prober
+	app-crypt/pinentry[gtk,ncurses]
 	sys-fs/squashfs-tools
 	net-misc/rsync"
 #	X? ( x11-misc/xdialog )

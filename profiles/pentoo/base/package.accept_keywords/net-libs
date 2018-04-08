@@ -1,3 +1,8 @@
+=net-libs/libmicrodns-0*
+
+#fix HAVE_REMOTE bad winpcap merge
+=net-libs/libpcap-1.8.1-r2
+
 #required by inspectrum
 net-libs/liquid-dsp
 
@@ -15,7 +20,7 @@ net-libs/libhackrf
 net-libs/cppzmq
 
 #xplico, ntop
-~net-libs/libndpi-1.6
+=net-libs/nDPI-2*
 
 #requried by zarp
 ~net-libs/nfqueue-bindings-0.5
@@ -24,3 +29,7 @@ net-libs/cppzmq
 
 #required by snort
 ~net-libs/daq-2.0.2
+
+net-libs/libtins
+
+net-libs/libpfring

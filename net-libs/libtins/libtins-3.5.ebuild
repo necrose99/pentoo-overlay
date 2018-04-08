@@ -11,7 +11,7 @@ SRC_URI="https://github.com/mfontanini/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.g
 LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+cxx11 +ack-tracker +wpa2 +dot11 static-libs"
+IUSE="+cxx11 +ack-tracker +wpa2 +dot11 +static-libs"
 
 REQUIRED_USE="
 	wpa2? ( dot11 )

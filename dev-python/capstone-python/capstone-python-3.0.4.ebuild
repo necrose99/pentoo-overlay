@@ -4,7 +4,7 @@
 EAPI=5
 
 MY_P=capstone-"${PV}"
-PYTHON_COMPAT=( python{2_7,3_4} )
+PYTHON_COMPAT=( python{2_7,3_4,3_5} )
 inherit eutils multilib distutils-r1
 
 DESCRIPTION="A lightweight multi-platform, multi-architecture disassembly framework"
@@ -17,7 +17,8 @@ IUSE="cython"
 
 RDEPEND="cython? ( dev-python/cython
 	dev-libs/capstone[python] )"
-DEPEND=""
+DEPEND="${RDEPEND}
+	dev-python/setuptools[${PYTHON_USEDEP}]"
 
 S=${WORKDIR}/${MY_P}/bindings/python
 

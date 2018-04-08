@@ -1,3 +1,4 @@
+net-wireless/rtl_433
 net-wireless/rx_tools
 net-wireless/soapysdr
 net-wireless/soapyhackrf
@@ -71,10 +72,15 @@ net-wireless/uhd
 net-wireless/lorcon
 
 =net-wireless/rtl8812au-4.2.5_p*
+=net-wireless/rtl8812au-5.2.9_p*
 =net-wireless/rtl8812au_asus-4.3.2_p*
 =net-wireless/rtl8812au_astsam-4.3.21_p*
+=net-wireless/rtl8812au_aircrack-ng-5.1.5*
 
 ~net-wireless/nfcpy-0.10.2
+
+net-wireless/wifite
+net-wireless/wifite2
 
 #below here likely needs cleanup
 net-wireless/acx
@@ -130,3 +136,4 @@ net-wireless/prism54
 net-wireless/ska
 net-wireless/ubertooth
 net-wireless/wifitap
+

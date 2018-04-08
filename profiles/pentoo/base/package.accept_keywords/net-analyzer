@@ -1,3 +1,7 @@
+=net-analyzer/gr-fosphor-9999 **
+
+net-analyzer/ostinato
+
 ~net-analyzer/owtf-2.0a
 
 ~net-analyzer/w3af-1.6.54
@@ -26,12 +30,18 @@ net-analyzer/multimon-ng
 ~net-analyzer/openvas-cli-1.2.0
 ~net-analyzer/openvas-scanner-3.4.0
 
+=net-analyzer/bettercap-2.4*
+dev-go/gopacket
+dev-go/gopacket-pfring
+dev-go/go-isatty
+dev-go/websocket
+dev-go/mux
+
 ~net-analyzer/aimsniff-0.9d
 ~net-analyzer/arpantispoofer-1.0.1.32
 ~net-analyzer/arping-2.12
 ~net-analyzer/autoscan-network-1.50
 ~net-analyzer/bmon-2.1.1_pre1
-=net-analyzer/bettercap-1.6*
 ~net-analyzer/chaosreader-0.94
 net-analyzer/cloudshark
 =net-analyzer/crackmapexec-3.1*
@@ -40,7 +50,7 @@ net-analyzer/cloudshark
 =net-analyzer/dnsrecon-0.8*
 ~net-analyzer/dsniff-2.4_beta1
 ~net-analyzer/enum4linux-0.8.9
-~net-analyzer/fierce-1.0.3
+=net-analyzer/fierce-1.2*
 ~net-analyzer/fragroute-1.2.6
 ~net-analyzer/geoedge-0.2
 ~net-analyzer/hunt-1.5-r1
@@ -54,7 +64,7 @@ net-analyzer/hyenae
 ~net-analyzer/masscan-1.0.3
 ~net-analyzer/mbrowse-0.4.3
 =net-analyzer/medusa-2.2*
-~net-analyzer/metagoofil-1.4b
+~net-analyzer/metagoofil-2.2
 =net-analyzer/nacker-0.0.1_pre*
 ~net-analyzer/nbtscan-1.5.1
 ~net-analyzer/ncrack-0.4_alpha
@@ -67,9 +77,9 @@ net-analyzer/nessus-plugins
 ~net-analyzer/netwag-5.39.0
 ~net-analyzer/netwox-5.39.0
 =net-analyzer/nikto-2.1.6_p*
-~net-analyzer/nmap-7.50
-~net-analyzer/ntop-5.0.1
-~net-analyzer/ntopng-2.4
+net-analyzer/nmap
+=net-analyzer/nmap-vulners-1*
+=net-analyzer/ntopng-3.0*
 ~net-analyzer/ntp-fingerprint-0.1
 ~net-analyzer/onesixtyone-0.3.2
 =net-analyzer/p0f-3*
@@ -78,7 +88,7 @@ net-analyzer/nessus-plugins
 ~net-analyzer/rain-1.2.9_beta1
 =net-analyzer/recon-ng-4.9*
 ~net-analyzer/rrdtool-1.4.7
-~net-analyzer/scapy-2.3.3
+=net-analyzer/scapy-2.4*
 ~net-analyzer/siphon-666-r1
 ~net-analyzer/sipvicious-0.2.8
 ~net-analyzer/sqlninja-0.2.6_p1
@@ -87,11 +97,11 @@ net-analyzer/nessus-plugins
 net-analyzer/snort
 ~net-analyzer/sslsniff-0.8
 ~net-analyzer/sslstrip-0.9
-=net-analyzer/sslyze-1.1*
+=net-analyzer/sslyze-1.4*
 =net-analyzer/sslscan-1.11*
 ~net-analyzer/subdomainer-1.3
 ~net-analyzer/tcpdump-4.3.0
-~net-analyzer/thc-ipv6-2.3
+~net-analyzer/thc-ipv6-3.2
 ~net-analyzer/thc-pptp-bruter-0.1.4
 ~net-analyzer/theHarvester-2.7
 ~net-analyzer/upnpscan-0.4
@@ -99,8 +109,10 @@ net-analyzer/snort
 ~net-analyzer/vomit-0.2c
 =net-analyzer/wapiti-2.3.0*
 =net-analyzer/wapiti-3.0.0*
-=net-analyzer/wfuzz-2.1*
+=net-analyzer/wfuzz-2.2*
 ~net-analyzer/wolpertinger-0.6
-~net-analyzer/xplico-1.1.0
+=net-analyzer/xplico-1.2*
 ~net-analyzer/xprobe-0.3
 net-analyzer/zmap
+
+net-analyzer/sublist3r

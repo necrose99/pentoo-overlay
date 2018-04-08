@@ -114,6 +114,4 @@ src_configure() {
 	fi
 
 	econf ${myconf[@]}
-
 }
-

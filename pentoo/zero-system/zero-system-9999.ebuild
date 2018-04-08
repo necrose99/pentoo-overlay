@@ -23,12 +23,10 @@ PDEPEND="
 		dev-vcs/mercurial
 		app-arch/p7zip
 		net-dns/dnsmasq
-		app-portage/gentoolkit-dev
 		app-portage/overlint
 		app-portage/repoman
 		app-misc/fslint
 		app-doc/pms
-		dev-python/awscli
 		dev-vcs/cvs
 		net-misc/keychain
 		app-portage/pfl
@@ -37,10 +35,11 @@ PDEPEND="
 		sys-devel/distcc
 		nu? ( dev-util/catalyst
 			net-p2p/mktorrent
-			sys-fs/zfs
 			dev-util/jenkins-bin
 		)
 		!nu? ( !arm? ( net-print/samsung-unified-linux-driver )
+			dev-ruby/pry
+			app-doc/doxygen
 			mail-client/thunderbird
 			!arm? ( mail-client/thunderbird-bin )
 			media-sound/picard
@@ -56,7 +55,7 @@ PDEPEND="
 			x11-misc/slim
 			!arm? ( www-plugins/google-talkplugin )
 			!arm? ( net-p2p/vuze )
-			!arm? ( app-emulation/wine )
+			!arm? ( app-emulation/wine-vanilla )
 			media-gfx/gimp
 			x11-apps/mesa-progs
 			media-video/xine-ui
