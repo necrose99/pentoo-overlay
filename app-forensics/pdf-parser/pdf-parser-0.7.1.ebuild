@@ -14,7 +14,7 @@ SRC_URI="http://www.didierstevens.com/files/software/${MY_P}.zip"
 
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="unicode yara"
 
 RDEPEND="${PYTHON_DEPS}
