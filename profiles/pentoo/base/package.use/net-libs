@@ -1,5 +1,6 @@
 net-libs/libbtbb extras
 net-libs/gtk-vnc python
+net-libs/libwebsockets client
 
 <=net-libs/libbtbb-2015.10.1 -wireshark-plugins
 
@@ -10,9 +11,6 @@ net-libs/liboauth -curl
 
 # required by net-analyzer/openvas
 net-libs/libmicrohttpd messages
-
-#zarp
-net-libs/nfqueue-bindings python perl
 
 #chromium needs inspector and icu
 net-libs/nodejs icu inspector

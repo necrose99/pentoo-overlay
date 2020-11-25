@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,16 +8,17 @@ HOMEPAGE="https://github.com/electron-userland/electron-packager"
 SRC_URI="https://github.com/electron-userland/electron-packager/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	https://dev.pentoo.ch/~blshkv/distfiles/electron-packager-14.0.1-node_modules.tar.gz"
 
-LICENSE=""
+LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+#broken, "electon-packager version" fails to run
+#KEYWORDS="~amd64"
 IUSE="doc"
 
 DEPEND="net-libs/nodejs[npm]"
 RDEPEND="${DEPEND}"
 
 src_prepare(){
-	mv ${WORKDIR}/node_modules ${S}
+	mv "${WORKDIR}/node_modules" "${S}"
 	eapply_user
 }
 

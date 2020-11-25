@@ -1,14 +1,4 @@
-=sci-libs/itpp-4.3.1-r1
-
-#sci-libs seem really old, so just use unstable
-~sci-libs/gsl-2.5
-=sci-libs/lapack-3.8*
-=sci-libs/lapack-reference-3.8*
-~sci-libs/blas-reference-20161223
-~sci-libs/cblas-reference-20161223
-
-=sci-libs/scipy-0.18*
-
+#Pentoo
 sci-electronics/migen
 sci-electronics/litex
 sci-electronics/litedram
@@ -17,8 +7,10 @@ sci-electronics/liteusb
 sci-electronics/liteeth
 sci-electronics/litescope
 
-#https://bugs.gentoo.org/670246
-=sci-libs/arpack-3.4*
-
+#Gentoo packages
+~sci-libs/blas-reference-20161223
+~sci-libs/cblas-reference-20161223
 #required by app-forensics/eagleeye deps
 ~sci-libs/dlib-19.16
+#required by gnuradio
+=sci-libs/volk-2.3*

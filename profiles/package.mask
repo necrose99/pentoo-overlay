@@ -7,9 +7,9 @@ net-wireless/hostapd-mana
 net-wireless/berate_ap
 net-wireless/wpa_sycophant
 
-# Masked for removal in 30 days. Too old apps (2019-12-25)
-app-crypt/hashkill
-net-analyzer/dnsa
-
 # use a better tool, https://github.com/pentoo/pentoo-overlay/issues/564
 net-misc/rdesktop-brute
+
+# this is an old python bindings for brotli
+# app-arch/brotli provides it's own compatible version and it should be used instead
+dev-python/brotlipy

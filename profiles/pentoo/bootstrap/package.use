@@ -1,5 +1,9 @@
+app-arch/libarchive -lz4 -zstd
+app-arch/zstd -lz4
 sys-auth/polkit -pam
+sys-auth/pambase -caps
 sys-libs/libcap -pam
+net-analyzer/rrdtool -python -ruby
 
 x11-libs/cairo -opengl
 
@@ -16,3 +20,5 @@ dev-util/cmake -qt5
 media-libs/mesa -vaapi
 
 dev-lang/python -bluetooth
+
+x11-libs/gtk+ -cups

@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,28 +9,36 @@ if [ "${PV}" = "9999" ]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/RfidResearchGroup/proxmark3.git"
 else
-	HASH_COMMIT="1ac5211601b50b82b41737dce0c3a72d9e0374ac"
-	SRC_URI="https://github.com/RfidResearchGroup/${PN}/archive/${HASH_COMMIT}.tar.gz -> ${P}.tar.gz"
+	#snapshot
+	#HASH_COMMIT="1ac5211601b50b82b41737dce0c3a72d9e0374ac"
+	#SRC_URI="https://github.com/RfidResearchGroup/${PN}/archive/${HASH_COMMIT}.tar.gz -> ${P}.tar.gz"
+	#S=${WORKDIR}/${PN}-${HASH_COMMIT}
+
+	#or release
 	KEYWORDS="~amd64"
-	S=${WORKDIR}/${PN}-${HASH_COMMIT}
+	SRC_URI="https://github.com/RfidResearchGroup/proxmark3/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 fi
 DESCRIPTION="A general purpose RFID tool for Proxmark3 hardware"
 HOMEPAGE="https://github.com/RfidResearchGroup/proxmark3"
 
 LICENSE="GPL-2+ GPL-3+"
 SLOT="0"
-STANDALONE="+standalone-lf-samyrun standalone-lf-proxbrute standalone-lf-hidbrute standalone-hf-young standalone-hf-mattyrun standalone-hf-colin standalone-hf-bog"
-IUSE="deprecated +firmware +pm3rdv4 ${STANDALONE}"
+STANDALONE="standalone-lf-em4100emul standalone-lf-em4100rswb standalone-lf-em4100rwc standalone-lf-icehid standalone-lf-samyrun standalone-lf-proxbrute standalone-lf-hidbrute standalone-hf-14asniff standalone-hf-legic +standalone-hf-msdsal standalone-hf-young standalone-hf-mattyrun standalone-hf-colin standalone-hf-bog"
+IUSE="+bluez deprecated +firmware +pm3rdv4 +qt ${STANDALONE}"
 REQUIRED_USE="?? ( ${STANDALONE/+/} )
+			standalone-lf-icehid? ( pm3rdv4 )
+			standalone-hf-14asniff? ( pm3rdv4 )
 			standalone-hf-colin? ( pm3rdv4 )
 			standalone-hf-bog? ( pm3rdv4 )"
 
 RDEPEND="virtual/libusb:0
 	sys-libs/ncurses:*[tinfo]
-	dev-qt/qtcore:5
+	sys-libs/readline:=
+	bluez? ( net-wireless/bluez )
+	qt? ( dev-qt/qtcore:5
 	dev-qt/qtwidgets:5
-	dev-qt/qtgui:5
-	sys-libs/readline:="
+	dev-qt/qtgui:5 )
+	"
 DEPEND="${RDEPEND}
 	firmware? ( sys-devel/gcc-arm-none-eabi:0 )"
 
@@ -46,12 +54,26 @@ src_compile(){
 		echo 'PLATFORM=PM3OTHER' > Makefile.platform
 	fi
 	#then we set a standalone mode
-	if use standalone-lf-samyrun; then
+	if use standalone-lf-em4100emul; then
+		echo 'STANDALONE=LF_EM4100EMUL' >> Makefile.platform
+	elif use standalone-lf-em4100rswb; then
+		echo 'STANDALONE=LF_EM4100RSWB' >> Makefile.platform
+	elif use standalone-lf-em4100rwc; then
+		echo 'STANDALONE=LF_EM4100RWC' >> Makefile.platform
+	elif use standalone-lf-icehid; then
+		echo 'STANDALONE=LF_ICEHID' >> Makefile.platform
+	elif use standalone-lf-samyrun; then
 		echo 'STANDALONE=LF_SAMYRUN' >> Makefile.platform
 	elif use standalone-lf-proxbrute; then
 		echo 'STANDALONE=LF_PROXBRUTE' >> Makefile.platform
 	elif use standalone-lf-hidbrute; then
 		echo 'STANDALONE=LF_HIDBRUTE' >> Makefile.platform
+	elif use standalone-hf-14asniff; then
+		echo 'STANDALONE=HF_14ASNIFF' >> Makefile.platform
+	elif use standalone-hf-legic; then
+		echo 'STANDALONE=HF_LEGIC' >> Makefile.platform
+	elif use standalone-hf-msdsal; then
+		echo 'STANDALONE=HF_MSDSAL' >> Makefile.platform
 	elif use standalone-hf-young; then
 		echo 'STANDALONE=HF_YOUNG' >> Makefile.platform
 	elif use standalone-hf-mattyrun; then
@@ -66,6 +88,8 @@ src_compile(){
 
 	export PREFIX=/usr
 	export V=1
+	use qt || export SKIPQT=1
+	use bluez || export SKIPBT=1
 	if use firmware; then
 		emake all
 	elif use deprecated; then
@@ -85,7 +109,15 @@ src_install(){
 	elif use deprecated; then
 		emake INSTALLDOCSRELPATH="/share/doc/${PF}" client/install mfkey/install nonce2key/install common/install
 	else
-		emake INSTALLDOCSRELPATH="/share/doc/${PF}" client/install common_install
+		emake INSTALLDOCSRELPATH="/share/doc/${PF}" client/install common/install
+	fi
+}
+
+src_test() {
+	if use firmware; then
+		./pm3test.sh
+	else
+		./pm3test.sh client
 	fi
 }
 

@@ -1,3 +1,6 @@
+#https://github.com/FreeRADIUS/freeradius-server/issues/3693 -python
+net-dialup/freeradius python
+
 #breaks ardunio
 cross-avr/gcc pie ssp
 
@@ -36,14 +39,27 @@ net-wireless/wifite2 cuda
 #wine doesn't need opencl for anything important afaik, and opencl sucks in gentoo
 app-emulation/wine-vanilla opencl
 
-#VIDEO_CARDS="intel i965" is a recommended and correct setting for intel users
+#VIDEO_CARDS="intel i965 iris" is a recommended and correct setting for intel users
 #for any/all packages which don't actually depend on deprecated xf86-video-intel driver
 #modesetting is superior in all noticable ways and it default nearly everywhere
 x11-base/xorg-drivers video_cards_i915
-
-app-admin/testdisk -ewf
 
 #unmask flag
 dev-java/oracle-jdk-bin:11 -gentoo-vm
 dev-java/openjdk-bin:11 -gentoo-vm
 dev-java/openjdk:11 -gentoo-vm
+
+#no python3 support
+#python2 is mostly dead, and this is clinging to it and breaking smooth update
+dev-lang/yasm python
+dev-libs/libdnet python
+dev-libs/libgamin python
+dev-libs/libnatspec python
+dev-libs/libxslt python
+x11-libs/goocanvas python
+
+#older versions are python 2 only
+<dev-vcs/subversion-1.14.0 python #1.14.0 doesn't actually build with python of course... https://bugs.gentoo.org/725850
+<media-gfx/gimp-2.10.21 python #doesn't actually exist yet, might need modification
+<dev-vcs/subversion-1.14.0 python
+<net-analyzer/net-snmp-5.9 python

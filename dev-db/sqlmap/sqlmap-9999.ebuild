@@ -16,7 +16,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/sqlmapproject/sqlmap"
 else
 	SRC_URI="https://github.com/sqlmapproject/sqlmap/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="amd64 ~arm64 x86"
 fi
 
 LICENSE="GPL-2"
@@ -45,7 +45,7 @@ SLOT=0
 IUSE="doc"
 >>>>>>> cb949caa293c8bc8c262510444afa65aba6f2150
 
-DEPEND="${PYTHON_DEPS}"
+RDEPEND="${PYTHON_DEPS}"
 
 pkg_setup() {
 	python-single-r1_pkg_setup

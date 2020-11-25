@@ -1,50 +1,92 @@
-#### Pentoo
-=net-wireless/proxmark3-3.1*
-
 net-wireless/create_ap
 
-net-wireless/wifi-pumpkin
+net-wireless/dsdcc
 
-net-wireless/hcxkeys
-net-wireless/hcxtools
-net-wireless/hcxdumptool
-
-=net-wireless/fern-wifi-cracker-3*
-
-net-wireless/wifite
+net-wireless/wifipumpkin3
 
 net-wireless/nfcpy
 
 net-wireless/eaphammer
 
 net-wireless/blue_hydra
+net-wireless/btle-sniffer
 
 #most of the pentoo-radio stuff has no stable at all so it all lives in here for now
 net-wireless/airspy
 net-wireless/gr-gsm **
+net-wireless/killerbee
 net-wireless/kalibrate-hackrf **
-net-wireless/gr-osmosdr
-net-wireless/gr-iqbal
-=net-wireless/op25-9999 **
-=net-wireless/reaver-wps-fork-t6x-1.6*
+net-wireless/op25
 net-wireless/rtl-sdr
 net-wireless/chirp
-=net-wireless/gr-baz-9999 **
-#=net-wireless/gr-air-modes-9999 **
-#stay on gnuradio3.7
-~net-wireless/gr-air-modes-20170929
 net-wireless/gqrx
-=net-wireless/gnuradio-3.7*
 net-wireless/virtualradar-bin
 net-wireless/uhd
+net-wireless/sigdigger
+net-wireless/suwidgets
+net-wireless/sigutils
+net-wireless/suscan
+
+=net-wireless/gnuradio-3.8*
+~net-wireless/gr-ieee802154-0.0_p20191006
+net-wireless/gr-rds
+~net-wireless/gr-iio-0.3_p20191219
+dev-python/wxpython:4.0
+net-wireless/gr-osmosdr
+~net-wireless/gr-iqbal-0.38.1
+~dev-python/matplotlib-3.1.2
+~net-wireless/gr-paint-0.0_p20200517
 
 ~net-wireless/orinoco-fwutils-0.3 **
-=net-wireless/orinoco-usb-9999 **
 
 net-wireless/rtl8812au_aircrack-ng
+net-wireless/rtl8812au
 net-wireless/rtl8822bu
 
+net-wireless/inspectrum
+net-wireless/n4p
 
+net-wireless/urh
+
+net-wireless/rfidler
+
+net-wireless/dump1090
+
+net-wireless/dump1090_sdrplus
+
+net-wireless/sdrtrunk-bin
+
+net-wireless/wireless-regdb
+
+net-wireless/blueman
+
+net-wireless/bladerf
+net-wireless/yatebts
+net-wireless/bladerf-firmware
+net-wireless/bladerf-fpga
+net-wireless/hackrf-tools
+net-wireless/portapack-firmware
+net-wireless/portapack-mayhem
+net-wireless/compat-wireless
+net-wireless/crackle
+
+net-wireless/aircrack-ng
+~net-wireless/airsnort-0.2.7e
+
+net-wireless/kismet
+net-wireless/kismetdb
+net-wireless/kismetmobiledashboard
+~net-wireless/spectools-2016.01.1
+
+~net-wireless/mfoc-0.10.7 ~amd64
+
+~net-wireless/pyrit-0.5.0
+~net-wireless/cpyrit-opencl-0.5.0
+
+net-wireless/multimode
+
+
+#below here likely needs cleanup
 #### Gentoo (to be cleaned)
 
 net-wireless/lorcon
@@ -58,8 +100,6 @@ net-wireless/editcp-bin
 net-wireless/md380tools **
 net-wireless/mousejack
 net-wireless/jackit
-net-wireless/gr-ieee802154
-net-wireless/wpa_supplicant
 net-wireless/osmo-fl2k
 net-wireless/qspectrumanalyzer
 net-wireless/rtl_433
@@ -72,57 +112,6 @@ net-wireless/soapybladerf
 net-wireless/soapyplutosdr
 net-wireless/soapy_power
 net-wireless/tempestsdr
-
-net-wireless/inspectrum
-net-wireless/n4p
-
-net-wireless/urh
-
-net-wireless/rfidler
-
-net-wireless/dump1090
-net-wireless/wireless-regdb
-
-net-wireless/blueman
-
-net-wireless/bladerf
-net-wireless/yatebts
-net-wireless/bladerf-firmware
-net-wireless/bladerf-fpga
-net-wireless/hackrf-tools
-net-wireless/portapack-firmware
-net-wireless/portapack-havoc
-net-wireless/compat-wireless
-net-wireless/crackle
-
-net-wireless/aircrack-ng
-~net-wireless/airsnort-0.2.7e
-net-analyzer/scapy
-
-net-wireless/kismet
-net-wireless/kismetdb
-net-wireless/kismetmobiledashboard
-~net-wireless/spectools-2016.01.1
-
-=net-wireless/reaver-1.6
-=net-wireless/pixiewps-1.4*
-~net-wireless/wireless-tools-30_pre9
-
-net-wireless/killerbee
-
-~net-wireless/mfoc-0.10.7 ~amd64
-
-~net-wireless/pyrit-0.5.0
-~net-wireless/cpyrit-opencl-0.5.0
-
-net-wireless/multimode
-
-~net-wireless/gr-iio-0.3
-
-
-
-
-#below here likely needs cleanup
 
 net-wireless/acx
 net-wireless/acx-firmware amd64
@@ -178,4 +167,3 @@ net-wireless/ubertooth
 net-wireless/wifitap
 
 net-wireless/cubicsdr
-

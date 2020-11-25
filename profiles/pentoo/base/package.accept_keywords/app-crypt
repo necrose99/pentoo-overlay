@@ -1,27 +1,20 @@
 ### Pentoo ###
 app-crypt/yubioath-desktop
-~app-crypt/tpm2-tss-2.2.3
+~app-crypt/tpm2-tss-2.4.0
 app-crypt/acsccid
 
 app-crypt/steghide
 
 app-crypt/samdump2
 
-=app-crypt/bruteforce-salted-openssl-1.4*
-
-app-crypt/asleap
-
 ~app-crypt/hashid-3.1.4
 
 #Gentoo
 
-=app-crypt/yubikey-manager-qt-1.1* ~amd64
-
-~dev-python/pyotherside-1.5.4 ~amd64
+=app-crypt/yubikey-manager-qt-1.1* **
+~app-crypt/yubikey-manager-3.1.1
 
 ~app-crypt/libykneomgr-0.1.8 **
-
-app-crypt/hashcat
 
 ~app-crypt/wisecracker-1.0
 

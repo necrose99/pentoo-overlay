@@ -8,10 +8,8 @@ net-proxy/dansguardian
 net-proxy/dante
 net-proxy/haproxy
 net-proxy/havp
-net-proxy/http-replicator
 net-proxy/httpush
-=net-proxy/mitmproxy-3.0*
-=net-proxy/mitmproxy-4.0*
+~net-proxy/mitmproxy-5.1.1
 net-proxy/ntlmaps
 ~net-proxy/ratproxy-1.58
 net-proxy/pingtunnel
@@ -26,3 +24,6 @@ net-proxy/tsocks
 net-proxy/ufdbguard
 net-proxy/webscarab
 net-proxy/ziproxy
+
+#we need this version or higher to avoid useradd/groupadd collisions
+~net-proxy/privoxy-3.0.28
