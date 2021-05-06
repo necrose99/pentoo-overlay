@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit python-r1
 
@@ -13,11 +13,10 @@ SRC_URI="https://github.com/libyal/${PN}/releases/download/${PV}/${PN}-alpha-${P
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="amd64 ~arm64 x86"
 IUSE="debug nls python +threads winapi"
 
-DEPEND="python? ( ${PYTHON_DEPS} )
-	dev-libs/libcdata
+DEPEND="dev-libs/libcdata
 	dev-libs/libcerror
 	dev-libs/libcnotify
 	dev-libs/libcthreads"
@@ -25,7 +24,10 @@ RDEPEND="${DEPEND}"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
+CMAKE_IN_SOURCE_BUILD=1
+
 src_configure() {
+
 	local myconf=(
 		$(use_enable python) \
 		$(use_enable nls) \
@@ -35,6 +37,8 @@ src_configure() {
 		$(use_enable debug verbose-output) \
 		$(use_enable winapi) \
 		$(use_enable threads multi-threading-support)
+#		--with-libcdata --with-libcerror \
+#		--with-libcnotify --with-libcthreads
 	)
 
 	if use python ; then

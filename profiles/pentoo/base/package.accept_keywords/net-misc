@@ -5,10 +5,13 @@ net-vpn/udp2raw-tunnel
 net-misc/wireshark-sap-plugin
 
 #Gentoo
+=net-libs/libsearpc-3.2*
+=net-misc/seafile-8*
+=net-misc/seafile-client-8*
 
 ~net-misc/nemesis-1.4
 ~net-misc/raccess-0.7
-~net-misc/sipsak-0.9.6_p1
+=net-misc/sipsak-0.9*
 ~net-misc/stunnel-4.44
 ~net-vpn/iodine-0.7.0
 net-misc/ieee-oui
@@ -87,7 +90,6 @@ net-misc/ssh-installkeys
 net-misc/strongswan
 net-misc/suite3270
 net-misc/switzerland
-~net-misc/tcpick-0.2.1
 net-misc/termpkg
 net-misc/throttle
 net-misc/tinc

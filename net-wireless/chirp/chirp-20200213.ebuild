@@ -2,12 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{6,7} )
-
-if [[ ${PV} == "99999999" ]] ; then
-	SCM=mercurial
-	EHG_REPO_URI="http://d-rats.com/hg/chirp.hg"
-fi
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit distutils-r1 xdg-utils ${SCM}
 
@@ -16,13 +11,18 @@ HOMEPAGE="http://chirp.danplanet.com"
 
 RESTRICT="test"
 if [[ ${PV} == "99999999" ]] ; then
+	inherit mercurial
+	EHG_REPO_URI="http://d-rats.com/hg/chirp.hg"
 	KEYWORDS=""
 else
 	#python3 brach: http://d-rats.com/hg/hgwebdir.cgi/chirp.hg/shortlog/68534f20c141
 	HASH_COMMIT="68534f20c141"
-	KEYWORDS="~amd64 ~x86"
 #	SRC_URI="http://trac.${PN}.danplanet.com/${PN}_daily/daily-${PV}/${PN}-daily-${PV}.tar.gz"
 	SRC_URI="http://d-rats.com/hg/hgwebdir.cgi/chirp.hg/archive/${HASH_COMMIT}.tar.gz -> ${P}.tar.gz"
+
+#python3 branch is broken
+#	KEYWORDS="~amd64 ~x86"
+
 	S="${WORKDIR}/${PN}-hg-${HASH_COMMIT}"
 fi
 LICENSE="GPL-3"

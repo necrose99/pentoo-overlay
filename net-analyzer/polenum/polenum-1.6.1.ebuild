@@ -3,8 +3,7 @@
 
 EAPI=7
 
-# TODO: add py3.* support
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{7,8,9} )
 
 inherit python-single-r1
 
@@ -19,6 +18,7 @@ KEYWORDS="~amd64 ~x86"
 RDEPEND="${PYTHON_DEPS}
 	$(python_gen_cond_dep 'dev-python/impacket[${PYTHON_MULTI_USEDEP}]')"
 DEPEND="${RDEPEND}"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 src_prepare() {
 	default

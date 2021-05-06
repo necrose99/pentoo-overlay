@@ -1,9 +1,6 @@
 #newer network manager significantly improves privacy
 <net-misc/networkmanager-1.18.4-r3
 
-#this version is broken for nl80211/cfg80211 channel setting
-=net-wireless/rtl8812au_aircrack-ng-5.3.4_p20190622
-
 #xf86-video-intel is deprecated and replaced by modesetting driver
 #hold it until acceleration works
 #x11-drivers/xf86-video-intel
@@ -40,6 +37,7 @@ dev-lang/ruby:2.1
 dev-lang/ruby:2.2
 dev-lang/ruby:2.3
 dev-lang/ruby:2.4
+dev-lang/ruby:2.5
 <virtual/rubygems-14
 <dev-ruby/did_you_mean-1.1.0
 
@@ -60,6 +58,8 @@ x11-libs/wxGTK:2.8
 <sys-fs/udev-init-scripts-27
 <dev-lang/perl-5.30
 <sys-devel/gcc-7.3.0
+<sys-devel/llvm-11.1.0
+<sys-devel/clang-11.1.0
 
 #This versions of binutils are known broken
 #run "emerge --update binutils" then remove the broken versions
@@ -73,6 +73,11 @@ x11-libs/wxGTK:2.8
 <dev-libs/icu-65.1
 <dev-libs/boost-1.72.0
 <dev-ruby/bundler-1.17.3-r1
+<net-voip/yate-6.2.0
+
+#prevent downgrade to known broken versions
+#https://bugs.archlinux.org/task/69563
+<app-emulation/runc-1.0.0_rc93
 
 #grub:0 is long dead, migration instructions here:
 #https://wiki.gentoo.org/wiki/GRUB2_Migration
@@ -118,3 +123,45 @@ dev-java/sun-jdk
 #There is also libxcrypt[compat] mode in newer versions, however the required functions
 #are no longer provided. Masked until somebody would figure out how to by pass that
 >sys-libs/libxcrypt-2.4
+
+#sys-apps/hwloc fails to build https://bugs.gentoo.org/744646
+=dev-util/opencl-headers-2020.06.16
+
+#https://bugs.gentoo.org/719924
+#~dev-libs/boost-1.74.0
+#~dev-util/boost-build-1.74.0
+
+#migrate to app-forensics/volatility3 instead
+app-forensics/volatility
+
+<dev-ruby/activesupport-5.2.4.4
+
+#no wpe patches yet
+>=net-dialup/freeradius-3.0.22
+
+# It's a very unstable package
+net-analyzer/osmedeus
+
+# not tested yet... (2019-09-21)
+# more info: https://github.com/pentoo/pentoo-overlay/issues/495
+net-wireless/hostapd-mana
+net-wireless/berate_ap
+net-wireless/wpa_sycophant
+
+# use a better tool, https://github.com/pentoo/pentoo-overlay/issues/564
+net-misc/rdesktop-brute
+
+# this is an old python bindings for brotli
+# app-arch/brotli provides it's own compatible version and it should be used instead
+dev-python/brotlipy
+
+#deprecated unslotted lua
+dev-lang/lua:0
+=net-dns/dnsmasq-2.83-r1
+=net-dns/dnsmasq-2.84
+
+#breaks catalyst
+>dev-python/snakeoil-0.9.5
+#requires new snakeoil
+>=sys-apps/pkgcore-0.11.8
+>=dev-util/pkgcheck-0.9.7

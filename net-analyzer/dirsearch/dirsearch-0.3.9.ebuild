@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{5,6,7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit eutils python-single-r1
@@ -12,7 +12,7 @@ DESCRIPTION="A simple command line tool designed to brute force dirs and files i
 HOMEPAGE="https://github.com/maurosoria/dirsearch"
 SRC_URI="https://github.com/maurosoria/dirsearch/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 ~arm64 x86"
 LICENSE="GPL-2"
 SLOT="0"
 
@@ -24,8 +24,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# run it without fucking root!
-	eapply "${FILESDIR}/${P}_add_homedir_support-r1.patch"
+	#https://github.com/pentoo/pentoo-overlay/issues/512
+	eapply "${FILESDIR}/${PV}_add_homedir_support-r1.patch"
 
 	mv *.md Dockerfile  "${T}" || die
 	python_fix_shebang -q "${S}"

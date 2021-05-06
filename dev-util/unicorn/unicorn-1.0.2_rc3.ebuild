@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 MY_PV=${PV/_/-}
 
 DISTUTILS_OPTIONAL=1
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 inherit multilib distutils-r1
 
 DESCRIPTION="A lightweight multi-platform, multi-architecture CPU emulator framework"
@@ -15,7 +15,7 @@ SRC_URI="https://github.com/unicorn-engine/unicorn/archive/${MY_PV}.tar.gz -> ${
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~m68k ~mips ~sparc ~x86"
+KEYWORDS="amd64 ~arm ~arm64 ~m68k ~mips ~sparc x86"
 
 IUSE_UNICORN_TARGETS="x86 m68k arm aarch64 mips sparc"
 use_unicorn_targets=$(printf ' unicorn_targets_%s' ${IUSE_UNICORN_TARGETS})

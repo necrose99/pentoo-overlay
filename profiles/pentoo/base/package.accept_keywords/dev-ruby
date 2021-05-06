@@ -2,25 +2,28 @@
 dev-ruby/coffee-rails:5.0
 
 #rails 5.2
-~dev-ruby/rails-5.2.4.3
-~dev-ruby/activerecord-5.2.4.3
-~dev-ruby/actioncable-5.2.4.3
-~dev-ruby/actionmailer-5.2.4.3
-~dev-ruby/activejob-5.2.4.3
-~dev-ruby/activestorage-5.2.4.3
+~dev-ruby/rails-5.2.4.5
+~dev-ruby/activerecord-5.2.4.5
+~dev-ruby/actioncable-5.2.4.5
+~dev-ruby/actionmailer-5.2.4.5
+~dev-ruby/activejob-5.2.4.5
+~dev-ruby/activestorage-5.2.4.5
 =dev-ruby/websocket-driver-0.6*
 =dev-ruby/arel-9.0*
 =dev-ruby/websocket-extensions-0.1*
 ~dev-ruby/sassc-2.2.1
-~dev-ruby/autoprefixer-rails-9.8.6.3
+=dev-ruby/autoprefixer-rails-9.8.6*
 ~dev-ruby/nio4r-2.5.3
 ~dev-ruby/marcel-0.3.3
 ~dev-ruby/globalid-0.4.2
 ~dev-ruby/sassc-rails-2.1.2
-~dev-ruby/mimemagic-0.3.5
+=dev-ruby/mimemagic-0.3*
 
 #ruby24
 ~dev-ruby/colorize-0.8.1
+
+#required by haiti-hash
+=dev-ruby/paint-2*
 
 #required by cewl Pentoo packages
 dev-ruby/mini_exiftool
@@ -151,6 +154,11 @@ dev-ruby/faker:2
 =dev-ruby/ruby-macho-2.2*
 =dev-ruby/ed25519-1.2*
 =dev-ruby/warden-1.2* ~amd64
+=dev-ruby/zeitwerk-2.4*
+
+#required for rake:2.2
+=dev-ruby/sinatra-2.1*
+=dev-ruby/rack-protection-2.1*
 
 #wpscan
 =dev-ruby/addressable-2.7*

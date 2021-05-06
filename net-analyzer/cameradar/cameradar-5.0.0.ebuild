@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,8 +7,7 @@ inherit go-module
 
 EGO_PN=github.com/ullaakut/${PN}
 
-
-# go mod vendor && grep "# g" ./vendor/modules.txt | sort
+# use dev-go/get-ego-vendor to generate EGO_SUM
 EGO_SUM=(
 	"cloud.google.com/go v0.26.0/go.mod"
 	"github.com/BurntSushi/toml v0.3.1"
@@ -189,8 +188,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="gnome X"
 
-DEPEND=">=dev-lang/go-1.12"
-
+RDEPEND=">=dev-lang/go-1.12"
 DEPEND="${RDEPEND}"
 
 src_prepare() {

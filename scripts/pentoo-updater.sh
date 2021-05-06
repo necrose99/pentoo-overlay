@@ -17,7 +17,7 @@ fi
 
 #this is bash specific
 exec   > >(tee -i /tmp/pentoo-updater.log)
-exec  2> >(tee -i /tmp/pentoo-updater.log >& 2)
+exec  2> >(tee -i /tmp/pentoo-updater.log >&2)
 #end bash specific
 
 WE_FAILED=0
@@ -146,18 +146,28 @@ check_profile () {
   fi
 
   # profile migration routine for amd64 17.0->17.1
-  #if [ "${ARCH}" = "amd64" ]; then
-    #if [ -L "/lib" ] || [ -e "/lib32" ] || [ -e "/usr/lib32" ]; then
-    #  migrate_profile
-    #fi
-  #fi
+  if [ "${ARCH}" = "amd64" ]; then
+    if [ -L "/lib" ] || [ -e "/lib32" ] || [ -e "/usr/lib32" ]; then
+      migrate_profile || export WE_FAILED=1
+    fi
+  fi
 }
 
 migrate_profile() {
   if [ -L "/lib" ] && [ "${ARCH}" = "amd64" ]; then
     #gentoo has deprecated the 17.0 symlink lib profile for amd64, so let's migrate too
-    if [ ! -x "$(command -v unsymlink-lib)" ]; then
+    if ! portageq has_version / unsymlink-lib; then
       emerge -1 app-portage/unsymlink-lib
+    fi
+    if ! portageq has_version / unsymlink-lib; then
+      emerge -1 app-portage/unsymlink-lib
+    fi
+    if ! portageq has_version / unsymlink-lib; then
+      emerge -1 app-portage/unsymlink-lib
+    fi
+    if ! portageq has_version / unsymlink-lib; then
+      export WE_FAILED=1
+      return 1
     fi
     unsymlink-lib --analyze || exit 1
     unsymlink-lib --migrate || exit 1
@@ -165,11 +175,10 @@ migrate_profile() {
     if readlink /etc/portage/make.profile | grep -qE 'pentoo/hardened/linux/amd64$|pentoo/hardened/linux/amd64/'; then
       check_profile force
     fi
+  fi
+  if [ -L "/lib32" ] || [ -L "/usr/lib32" ]; then
     rebuild_lib32
-    rebuild_lib32
-    rebuild_lib32
-    rebuild_lib32
-    rebuild_lib32 || die
+    rebuild_lib32 || WE_FAILED=1
   fi
   if [ -L "/lib32" ] && ! qfile /lib32 > /dev/null 2>&1; then
     rm -rf "/lib32"
@@ -177,6 +186,7 @@ migrate_profile() {
   if [ -L "/usr/lib32" ] && ! qfile /usr/lib32 > /dev/null 2>&1; then
     rm -rf "/usr/lib32"
   fi
+  return 0
 }
 
 rebuild_lib32() {
@@ -191,7 +201,11 @@ rebuild_lib32() {
     REBUILD_DIRS="${REBUILD_DIRS} /usr/lib/llvm/*/lib32"
   fi
   if [ -n "${REBUILD_DIRS}" ]; then
-    emerge -1v --deep ${REBUILD_DIRS}
+    if [ -n "${clst_target}" ]; then
+      emerge -1v --deep --usepkg=n --buildpkg=y ${REBUILD_DIRS}
+    else
+      emerge -1v --deep ${REBUILD_DIRS}
+    fi
     return $?
   else
     return 0
@@ -512,6 +526,16 @@ main_checks() {
     printf "Removing old did_you_mean\n"
     emerge -C "<dev-ruby/did_you_mean-1.3.1"
   fi
+  removeme10=$(portageq match / 'dev-libs/ilbc-rfc3951')
+  if [ -n "${removeme10}" ]; then
+    printf "Removing obsolete dev-libs/ilbc-rfc3951\n"
+    emerge -C "dev-libs/ilbc-rfc3951"
+  fi
+  removeme11=$(portageq match / '<net-voip/yate-6.2.0')
+  if [ -n "${removeme11}" ]; then
+    printf "Removing old <net-voip/yate-6.2.0\n"
+    emerge -C "<net-voip/yate-6.2.0"
+  fi
 
   #before main upgrades, let's set a good java-vm
   set_java
@@ -553,6 +577,8 @@ main_upgrades() {
     emerge --buildpkg @changed-deps || safe_exit
     emerge --buildpkg --usepkg --onlydeps --oneshot --deep --update --newuse --changed-deps --newrepo pentoo/pentoo || safe_exit
     etc-update --automode -5 || safe_exit
+    #this is the wrong place to rebuild all the packages since it doesn't get fed back into catalyst
+    #quickpkg --include-config=y $($(portageq get_repo_path / pentoo)/scripts/binpkgs-missing-rebuild)
   fi
 
   if portageq list_preserved_libs /; then

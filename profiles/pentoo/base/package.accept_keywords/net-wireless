@@ -12,6 +12,11 @@ net-wireless/blue_hydra
 net-wireless/btle-sniffer
 
 #most of the pentoo-radio stuff has no stable at all so it all lives in here for now
+net-wireless/libxtrx
+net-wireless/libxtrxll
+net-wireless/libxtrxdsp
+net-wireless/liblms7002m
+net-wireless/libusb3380
 net-wireless/airspy
 net-wireless/gr-gsm **
 net-wireless/killerbee
@@ -19,7 +24,7 @@ net-wireless/kalibrate-hackrf **
 net-wireless/op25
 net-wireless/rtl-sdr
 net-wireless/chirp
-net-wireless/gqrx
+
 net-wireless/virtualradar-bin
 net-wireless/uhd
 net-wireless/sigdigger
@@ -27,20 +32,20 @@ net-wireless/suwidgets
 net-wireless/sigutils
 net-wireless/suscan
 
+net-wireless/sdrangel
+
 =net-wireless/gnuradio-3.8*
-~net-wireless/gr-ieee802154-0.0_p20191006
+net-wireless/gr-ieee802154
 net-wireless/gr-rds
 ~net-wireless/gr-iio-0.3_p20191219
 dev-python/wxpython:4.0
 net-wireless/gr-osmosdr
-~net-wireless/gr-iqbal-0.38.1
+net-wireless/gr-iqbal
 ~dev-python/matplotlib-3.1.2
 ~net-wireless/gr-paint-0.0_p20200517
 
 ~net-wireless/orinoco-fwutils-0.3 **
 
-net-wireless/rtl8812au_aircrack-ng
-net-wireless/rtl8812au
 net-wireless/rtl8822bu
 
 net-wireless/inspectrum

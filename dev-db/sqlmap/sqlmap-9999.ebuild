@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE="sqlite"
 
 inherit eutils bash-completion-r1 python-single-r1
@@ -46,6 +46,7 @@ IUSE="doc"
 >>>>>>> cb949caa293c8bc8c262510444afa65aba6f2150
 
 RDEPEND="${PYTHON_DEPS}"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 pkg_setup() {
 	python-single-r1_pkg_setup

@@ -11,7 +11,7 @@ dev-python/ipython matplotlib
 dev-python/QtPy gui printsupport
 
 #urh
-dev-python/PyQt5 testlib
+dev-python/PyQt5 testlib sql
 
 #remove python2 deps
 #dev-python/netaddr -cli
@@ -23,3 +23,6 @@ dev-python/django-constance database
 app-arch/brotli python
 
 dev-python/pyside2 designer gui network widgets
+
+#required by httpx
+dev-python/rfc3986 idna
