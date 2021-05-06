@@ -1,3 +1,6 @@
+#vlc bluray
+=dev-libs/libudfread-1.1*
+
 #python 3.9
 ~dev-libs/gobject-introspection-1.66.1
 ~dev-libs/gobject-introspection-common-1.66.1
@@ -46,7 +49,7 @@ dev-libs/libdwarf
 #opencl stuff unversioned and not by accident
 dev-libs/intel-neo
 dev-libs/opencl-icd-loader
-~dev-libs/opencl-clang-11.0.0
+dev-libs/opencl-clang
 dev-libs/rocclr
 dev-libs/rocm-opencl-runtime
 dev-libs/rocr-runtime
