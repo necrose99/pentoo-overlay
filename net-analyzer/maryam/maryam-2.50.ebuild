@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{7,8,9,10} )
 
 inherit distutils-r1
 
-DESCRIPTION="OWASP Maryam is a modular/optional open source OSINT and data gathering framework"
+DESCRIPTION="OWASP Maryam is a modular open-source framework based on OSINT and data gathering. "
 HOMEPAGE="https://owasp.org/www-project-maryam/"
 SRC_URI="https://github.com/saeeddhqan/Maryam/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
