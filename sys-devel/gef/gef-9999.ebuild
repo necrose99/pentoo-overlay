@@ -3,15 +3,14 @@
 
 EAPI=7
 
-#dev-libs/keystone does not support python3.9 yet
-PYTHON_COMPAT=( python3_{7..8} )
+PYTHON_COMPAT=( python3_{8..9} )
 
 inherit eutils python-single-r1
 
 DESCRIPTION="A GDB Enhanced Features for exploit devs & reversers"
 HOMEPAGE="https://github.com/hugsy/gef"
 
-if [[ ${PV} == *9999 ]]; then
+if [[ "${PV}" == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/hugsy/gef"
 else

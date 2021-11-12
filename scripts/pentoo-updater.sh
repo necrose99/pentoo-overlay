@@ -20,7 +20,7 @@ exec   > >(tee -i /tmp/pentoo-updater.log)
 exec  2> >(tee -i /tmp/pentoo-updater.log >&2)
 #end bash specific
 
-WE_FAILED=0
+export WE_FAILED=0
 . /etc/profile
 env-update
 
@@ -130,7 +130,7 @@ check_profile () {
           binary=""
         fi
         if [ "${failure}" = "0" ]; then
-          if ! eselect profile set pentoo:pentoo/${hardening}/linux/${PROFILE_ARCH}${binary}; then
+          if ! eselect profile set "pentoo:pentoo/${hardening}/linux/${PROFILE_ARCH}${binary}"; then
             failure="1"
           fi
         fi
@@ -178,7 +178,7 @@ migrate_profile() {
   fi
   if [ -L "/lib32" ] || [ -L "/usr/lib32" ]; then
     rebuild_lib32
-    rebuild_lib32 || WE_FAILED=1
+    rebuild_lib32 || export WE_FAILED=1
   fi
   if [ -L "/lib32" ] && ! qfile /lib32 > /dev/null 2>&1; then
     rm -rf "/lib32"
@@ -343,6 +343,8 @@ do_sync() {
     return
   fi
 
+  # People seem to break these permissions a lot, so just set them.  it takes <3 seconds on my box
+  chown portage.portage -R /var/db/repos/{gentoo,pentoo}
   if ! emerge --sync; then
     if [ -e /etc/portage/repos.conf/pentoo.conf ] && grep -q pentoo.asc /etc/portage/repos.conf/pentoo.conf; then
       printf "Pentoo repo key incorrectly defined, fixing..."
@@ -363,10 +365,12 @@ do_sync() {
 
 main_checks() {
   setup_env
-  if kernel_symlink_fixer; then
-    KERNEL_SYMLINK=0
-  else
-    KERNEL_SYMLINK=1
+  if [ -z "${clst_target}" ]; then
+    if kernel_symlink_fixer; then
+      KERNEL_SYMLINK=0
+    else
+      KERNEL_SYMLINK=1
+    fi
   fi
   #check profile, manage repo, ensure valid python selected
   check_profile
@@ -374,10 +378,10 @@ main_checks() {
     mkdir -p /var/log/portage/emerge-info/
     emerge --info > /var/log/portage/emerge-info/emerge-info-$(date "+%Y%m%d").txt
   else #we are on a user system
-    if [[ -z "$(eselect python show)" || ! -f "/usr/bin/$(eselect python show)" ]]; then
-      eselect python update
-    fi
-    eselect python cleanup
+    #if [[ -z "$(eselect python show)" || ! -f "/usr/bin/$(eselect python show)" ]]; then
+    #  eselect python update
+    #fi
+    #eselect python cleanup
     [ "${NO_SYNC}" = "true" ] || do_sync
     check_profile
     if [ -d /var/db/repos/pentoo ] && [ -d /var/lib/layman/pentoo ]; then
@@ -419,26 +423,26 @@ main_checks() {
     exit 1
   fi
   #set default implementation
-  eselect python set "${PYTHON3}"
+  #eselect python set "${PYTHON3}"
   #set python 3 implementation
-  if eselect python list --python3 | grep -q "${PYTHON3}"; then
-    eselect python set --python3 "${PYTHON3}" || safe_exit
-  else
-    printf "System wants ${PYTHON3} as default python3 version but it isn't installed yet.\n"
-    RESET_PYTHON=1
-  fi
+  #if eselect python list --python3 | grep -q "${PYTHON3}"; then
+  #  eselect python set --python3 "${PYTHON3}" || safe_exit
+  #else
+  #  printf "System wants ${PYTHON3} as default python3 version but it isn't installed yet.\n"
+  #  RESET_PYTHON=1
+  #fi
   "${PYTHON3}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON3#python}"
 
   #fix python2, if it's even requested
   if [ -n "${PYTHON2}" ]; then
     # set python 2 implementation if requested
-    if eselect python list --python2 | grep -q "${PYTHON2}"; then
-      eselect python set --python2 "${PYTHON2}" || safe_exit
+    #if eselect python list --python2 | grep -q "${PYTHON2}"; then
+    #  eselect python set --python2 "${PYTHON2}" || safe_exit
       "${PYTHON2}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON2#python}"
-    else
-      printf "System wants ${PYTHON2} as default python2 version but it isn't installed yet.\n"
-      RESET_PYTHON=1
-    fi
+    #else
+    #  printf "System wants ${PYTHON2} as default python2 version but it isn't installed yet.\n"
+    #  RESET_PYTHON=1
+    #fi
   fi
 
   #always update portage as early as we can (after making sure python works)
@@ -536,6 +540,16 @@ main_checks() {
     printf "Removing old <net-voip/yate-6.2.0\n"
     emerge -C "<net-voip/yate-6.2.0"
   fi
+  removeme12=$(portageq match / '<dev-ruby/metasm-1.0.5')
+  if [ -n "${removeme12}" ]; then
+    printf "Removing old <dev-ruby/metasm-1.0.5\n"
+    emerge -C "<dev-ruby/metasm-1.0.5"
+  fi
+  removeme13=$(portageq match / 'sys-fs/eudev')
+  if [ -n "${removeme13}" ]; then
+    printf "Deselecting deprecated eudev if it is selected\n"
+    emerge --deselect sys-fs/eudev
+  fi
 
   #before main upgrades, let's set a good java-vm
   set_java
@@ -548,17 +562,17 @@ main_upgrades() {
   set_java #might fail, run it a few times
   set_ruby
 
-  perl-cleaner --ph-clean --modules -- --buildpkg=y || safe_exit
+  perl-cleaner --modules -- --buildpkg=y || safe_exit
 
   emerge --deep --update --newuse -kb --changed-deps --newrepo @world || safe_exit
   set_java #might fail, run it a few times
   set_ruby
 
   if [ ${RESET_PYTHON} = 1 ]; then
-    eselect python set --python3 "${PYTHON3}" || safe_exit
+    #eselect python set --python3 "${PYTHON3}" || safe_exit
     "${PYTHON3}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON3#python}"
     if [ -n "${PYTHON2}" ]; then
-      eselect python set --python2 "${PYTHON2}" || safe_exit
+      #eselect python set --python2 "${PYTHON2}" || safe_exit
       "${PYTHON2}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON2#python}"
     fi
   fi
@@ -579,6 +593,9 @@ main_upgrades() {
     etc-update --automode -5 || safe_exit
     #this is the wrong place to rebuild all the packages since it doesn't get fed back into catalyst
     #quickpkg --include-config=y $($(portageq get_repo_path / pentoo)/scripts/binpkgs-missing-rebuild)
+    emerge -1 app-portage/recover-broken-vdb
+    recover-broken-vdb-find-broken.sh || export WE_FAILED=1
+    emerge -C app-portage/recover-broken-vdb
   fi
 
   if portageq list_preserved_libs /; then
@@ -624,8 +641,8 @@ elif [ "${currkern/gentoo/}" != "${currkern}" ]; then
 else
   EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean || safe_exit
 fi
-set_java || WE_FAILED=1 #only tell the updater that this failed if it's still failing at the end
-set_ruby || WE_FAILED=1
+set_java || export WE_FAILED=1 #only tell the updater that this failed if it's still failing at the end
+set_ruby || export WE_FAILED=1
 
 if portageq list_preserved_libs /; then
   FEATURES="-getbinpkg" emerge @preserved-rebuild --usepkg=n --buildpkg=y || safe_exit

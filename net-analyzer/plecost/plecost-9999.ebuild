@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..9} )
 inherit git-r3 distutils-r1
 
 DESCRIPTION="Wordpress finger printing tool, retrieve information about the plugins and versions installed"
@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-DEPEND="dev-python/beautifulsoup[${PYTHON_USEDEP}]
+DEPEND="dev-python/beautifulsoup4[${PYTHON_USEDEP}]
 		dev-python/aiohttp[${PYTHON_USEDEP}]
 		dev-python/termcolor[${PYTHON_USEDEP}]
 		dev-python/chardet[${PYTHON_USEDEP}]"

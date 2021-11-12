@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{8..9} )
 
 inherit python-single-r1 git-r3
 
@@ -16,7 +16,7 @@ SLOT="0"
 
 RDEPEND="${PYTHON_DEPS}
 	$(python_gen_cond_dep '
-		dev-python/beautifulsoup:4[${PYTHON_MULTI_USEDEP}]
+		dev-python/beautifulsoup4[${PYTHON_MULTI_USEDEP}]
 		dev-python/cchardet[${PYTHON_MULTI_USEDEP}]
 		dev-python/censys[${PYTHON_MULTI_USEDEP}]
 		dev-python/docopt[${PYTHON_MULTI_USEDEP}]

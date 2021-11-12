@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{8..9} )
 inherit eutils distutils-r1
 
 DESCRIPTION="The Offensive Web Testing Framework"
@@ -41,7 +41,6 @@ RDEPEND="
 	!dev-python/tornado
 	>=www-servers/tornado-5.0.2[${PYTHON_USEDEP}]
 
-	virtual/python-typing[${PYTHON_USEDEP}]
 	net-misc/proxychains
 
 	dev-db/postgresql:*
