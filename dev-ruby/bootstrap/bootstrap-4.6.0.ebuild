@@ -3,7 +3,7 @@
 
 EAPI=7
 
-USE_RUBY="ruby25 ruby26"
+USE_RUBY="ruby26 ruby27"
 RUBY_FAKEGEM_RECIPE_DOC="rdoc"
 # Requires capybara + poltergeist
 RUBY_FAKEGEM_RECIPE_TEST="none"
@@ -12,7 +12,7 @@ RUBY_FAKEGEM_BINWRAP=""
 
 inherit ruby-fakegem
 
-DESCRIPTION="Bootstrap 4 rubygem for Rails / Sprockets / Hanami / etc"
+DESCRIPTION="Bootstrap rubygem for Rails / Sprockets / Hanami / etc"
 HOMEPAGE="https://github.com/twbs/bootstrap-rubygem"
 LICENSE="MIT"
 

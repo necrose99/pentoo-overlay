@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -23,15 +23,19 @@ HOMEPAGE="https://github.com/RfidResearchGroup/proxmark3"
 
 LICENSE="GPL-2+ GPL-3+"
 SLOT="0"
-STANDALONE="standalone-lf-em4100emul standalone-lf-em4100rswb standalone-lf-em4100rwc standalone-lf-icehid standalone-lf-samyrun standalone-lf-proxbrute standalone-lf-hidbrute standalone-hf-14asniff standalone-hf-legic +standalone-hf-msdsal standalone-hf-young standalone-hf-mattyrun standalone-hf-colin standalone-hf-bog"
+STANDALONE="standalone-lf-em4100emul standalone-lf-em4100rswb standalone-lf-em4100rwc standalone-lf-icehid standalone-lf-samyrun standalone-lf-proxbrute standalone-lf-hidbrute standalone-lf-tharexde standalone-lf-nexid standalone-hf-14asniff standalone-hf-legic +standalone-hf-msdsal standalone-hf-young standalone-hf-mattyrun standalone-hf-colin standalone-hf-bog standalone-hf-aveful standalone-hf-craftbyte standalone-hf-tcprst standalone-hf-iceclass standalone-hf-tmudford"
 IUSE="+bluez deprecated +firmware +pm3rdv4 +qt ${STANDALONE}"
 REQUIRED_USE="?? ( ${STANDALONE/+/} )
 			standalone-lf-icehid? ( pm3rdv4 )
 			standalone-hf-14asniff? ( pm3rdv4 )
+			standalone-lf-nexid? ( pm3rdv4 )
 			standalone-hf-colin? ( pm3rdv4 )
-			standalone-hf-bog? ( pm3rdv4 )"
+			standalone-hf-bog? ( pm3rdv4 )
+			standalone-hf-iceclass? ( pm3rdv4 )"
 
 RDEPEND="virtual/libusb:0
+	app-arch/bzip2
+	dev-libs/jansson
 	sys-libs/ncurses:*[tinfo]
 	sys-libs/readline:=
 	bluez? ( net-wireless/bluez )
@@ -51,7 +55,7 @@ src_compile(){
 		echo 'PLATFORM=PM3RDV4' > Makefile.platform
 		echo 'PLATFORM_EXTRAS=BTADDON' >> Makefile.platform
 	else
-		echo 'PLATFORM=PM3OTHER' > Makefile.platform
+		echo 'PLATFORM=PM3GENERIC' > Makefile.platform
 	fi
 	#then we set a standalone mode
 	if use standalone-lf-em4100emul; then
@@ -68,6 +72,10 @@ src_compile(){
 		echo 'STANDALONE=LF_PROXBRUTE' >> Makefile.platform
 	elif use standalone-lf-hidbrute; then
 		echo 'STANDALONE=LF_HIDBRUTE' >> Makefile.platform
+	elif use standalone-lf-tharexde; then
+		echo 'STANDALONE=LF_THAREXDE' >> Makefile.platform
+	elif use standalone-lf-nexid; then
+		echo 'STANDALONE=LF_NEXID' >> Makefile.platform
 	elif use standalone-hf-14asniff; then
 		echo 'STANDALONE=HF_14ASNIFF' >> Makefile.platform
 	elif use standalone-hf-legic; then
@@ -82,6 +90,16 @@ src_compile(){
 		echo 'STANDALONE=HF_COLIN' >> Makefile.platform
 	elif use standalone-hf-bog; then
 		echo 'STANDALONE=HF_BOG' >> Makefile.platform
+	elif use standalone-hf-aveful; then
+		echo 'STANDALONE=HF_AVEFUL' >> Makefile.platform
+	elif use standalone-hf-craftbyte; then
+		echo 'STANDALONE=HF_CRAFTBYTE' >> Makefile.platform
+	elif use standalone-hf-tcprst; then
+		echo 'STANDALONE=HF_TCPRST' >> Makefile.platform
+	elif use standalone-hf-iceclass; then
+		echo 'STANDALONE=HF_ICECLASS' >> Makefile.platform
+	elif use standalone-hf-tmudford; then
+		echo 'STANDALONE=HF_TMUDFORD' >> Makefile.platform
 	else
 		echo 'STANDALONE=' >> Makefile.platform
 	fi

@@ -12,7 +12,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sh ~sparc ~x86"
 fi
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{8..9} )
 
 inherit distutils-r1 ${SRC_ECLASS}
 
@@ -28,6 +28,7 @@ DEPEND="
 	>=dev-python/snakeoil-0.6.5[${PYTHON_USEDEP}]
 "
 RDEPEND="
+	dev-python/fasteners[${PYTHON_USEDEP}]
 	>=dev-python/snakeoil-0.6.5[${PYTHON_USEDEP}]
 	>=dev-python/pydecomp-0.3[${PYTHON_USEDEP}]
 	app-arch/lbzip2
@@ -38,7 +39,7 @@ RDEPEND="
 	amd64? ( >=sys-boot/syslinux-3.72 )
 	x86? ( >=sys-boot/syslinux-3.72 )
 	ccache? ( dev-util/ccache )
-	iso? ( virtual/cdrtools )
+	iso? ( app-cdr/cdrtools )
 	kernel_linux? ( app-misc/zisofs-tools >=sys-fs/squashfs-tools-2.1 )
 "
 PDEPEND="system-bootloader? ( >=sys-apps/memtest86+-5.01-r4

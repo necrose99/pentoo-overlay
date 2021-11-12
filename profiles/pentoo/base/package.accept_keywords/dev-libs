@@ -1,3 +1,6 @@
+#kill python 2.7
+~dev-libs/libgnt-2.14.3
+
 #vlc bluray
 =dev-libs/libudfread-1.1*
 
@@ -40,7 +43,6 @@ dev-libs/protobuf amd64
 dev-libs/libdwarf
 
 ### Gentoo ############
-~dev-libs/keystone-0.9.1
 #usbguard
 =dev-libs/pegtl-2.8*
 =dev-libs/capstone-4.0*
@@ -48,7 +50,7 @@ dev-libs/libdwarf
 
 #opencl stuff unversioned and not by accident
 dev-libs/intel-neo
-dev-libs/opencl-icd-loader
+#dev-libs/opencl-icd-loader
 dev-libs/opencl-clang
 dev-libs/rocclr
 dev-libs/rocm-opencl-runtime

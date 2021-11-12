@@ -4,21 +4,10 @@ dev-python/bluepy
 #killerbee
 dev-python/rangeparser
 
-#waiting for h11
-dev-python/httpcore
-dev-python/httpx
-
 dev-python/cmake-converter
 
-#required by app-exploits/ropper
-dev-python/filebytes
-
-~dev-python/pyscard-1.9.9
 ~dev-python/pyotherside-1.5.9 ~amd64
-#needed by ipython
-~dev-python/backcall-0.1.0
 
-~dev-python/rdflib-4.2.2
 #gentoo is just old as shit
 #apple_bleee
 dev-python/fleep
@@ -52,9 +41,6 @@ dev-python/impacket
 dev-python/pypsrp
 dev-python/lsassy
 dev-python/pywerview
-#Gentoo
-~dev-python/paramiko-2.7.2
-~dev-python/neo4j-4.2.0
 
 ############ Gentoo unstable ======================
 ~dev-python/ldap3-2.7
@@ -79,19 +65,19 @@ dev-python/pywerview
 =dev-python/ntlm-auth-1*
 
 #requied by mitmproxy
+dev-python/publicsuffix amd64
 dev-python/pyasn1
 ~dev-python/blinker-1.4
 ~dev-python/construct-2.8.10
 ~dev-python/cryptography-2.9
 ~dev-python/dataclasses-0.7
-=dev-python/h11-0.11*
+=dev-python/h11-0.12*
 ~dev-python/html2text-2016.5.29
 ~dev-python/hyper-h2-3.0.1
 ~dev-python/hyperframe-5.1.0
 ~dev-python/kaitaistruct-0.9
 ~dev-python/netlib-0.10
 ~dev-python/pillow-2.3.0
-~dev-python/publicsuffix-2.20191221
 dev-python/pyopenssl amd64
 ~dev-python/pyperclip-1.6.0
 ~dev-python/ruamel-base-1.0.0
@@ -116,13 +102,12 @@ dev-python/protobuf-python amd64
 
 #required by net-analyzer/recon-ng
 ~dev-python/mechanize-0.4.3
-~dev-python/flasgger-0.9.4
+~dev-python/flasgger-0.9.5
 =dev-python/rq-1.5*
 =dev-python/redis-py-3.5*
 
 #wafwoof
 =dev-python/pluginbase-1.0*
-
 
 # required by net-analyzer/owtf-2.0a::pentoo
 ~dev-python/cookies-2.2.1
@@ -133,7 +118,6 @@ dev-python/protobuf-python amd64
 ~dev-python/PyVirtualDisplay-0.2
 
 # require by krackattacks-test-ap-ft
-
 dev-python/pyDes
 
 #Tiredful-API
@@ -222,6 +206,14 @@ dev-python/grequests
 dev-python/plotly
 dev-python/aiomultiprocess
 dev-python/aiosqlite
+#testing
+dev-python/fastapi
+dev-python/limits
+dev-python/orjson-bin
+dev-python/starlette
+dev-python/pydantic
+dev-python/aiofiles
+dev-python/slowapi
 
 #Gentoo unstable
 =dev-python/click-plugins-1*
@@ -229,24 +221,21 @@ dev-python/aiosqlite
 ~dev-python/typed-ast-1.3.1
 ~dev-python/mypy_extensions-0.4.1
 ~dev-python/mypy-0.701
-~dev-python/aiodns-2.0.0
+dev-python/aiodns amd64
 ~dev-python/texttable-1.6.2
-=dev-python/pycares-3.1*
+dev-python/pycares amd64
 
 #=app-forensics/spiderfoot-2.12.0
 # required by app-forensics/spiderfoot
 ~dev-python/adblockparser-0.7
 ~dev-python/cheroot-6.5.4
 ~dev-python/cherrypy-17.4.1
-~dev-python/exifread-2.2.0
-~dev-python/ipwhois-1.0.0
 ~dev-python/jaraco-functools-1.20
 ~dev-python/phonenumbers-8.3.1
 ~dev-python/portend-2.2
 ~dev-python/pygexf-0.2.2
 ~dev-python/python-docx-0.8.10
 ~dev-python/python-pptx-0.6.18
-~dev-python/python-secure-0.2.1
 ~dev-python/python-whois-0.7.2
 ~dev-python/tempora-1.14.1
 ~dev-python/zc-lockfile-1.4
@@ -297,9 +286,6 @@ dev-python/nessrest
 #required by gvm-tools / openvas
 dev-python/python-gvm
 
-# required by pwndbg
-~dev-python/psutil-4.4.2
-
 #required by openscap
 dev-python/json2html
 dev-python/yamllint
@@ -328,21 +314,18 @@ dev-python/pyee
 dev-python/webapp2
 ~dev-python/Flask-KVSession-0.6.2
 
-~dev-python/html2text-2019.9.26
-
+#pentoo
 dev-python/syslog-rfc5424-formatter
 dev-python/nplusone
 dev-python/faraday-plugins
-#=dev-python/python-sqlparse-0.3*
 dev-python/filteralchemy-fork
 dev-python/webargs
 dev-python/flask-session
 dev-python/marshmallow-sqlalchemy
-=dev-python/flask-1.1*
+
 dev-python/sqlalchemy_schemadisplay
 dev-python/filedepot
 dev-python/pypcapfile
-
 dev-python/flask-classful
 dev-python/flask-restless
 
@@ -352,7 +335,6 @@ dev-python/ipparser
 # required by "net-analyzer/GyoiThon
 
 # required by dev-util/mobsf
-dev-python/google-play-scraper
 dev-python/pdfkit
 dev-python/whitenoise
 dev-python/shelljob
@@ -393,10 +375,6 @@ dev-python/playsound
 # required by app-exploits/wesng
 ~dev-python/MechanicalSoup-0.12.0
 
-#required to get >dev-python/setuptools-46.0.0
-#https://bugs.gentoo.org/730952
-~dev-python/zope-interface-5.1.0
-
 # required by stegoveritas (argument)
 dev-python/stegoveritas-py010parser
 dev-python/stegoveritas-pfp
@@ -407,11 +385,16 @@ dev-python/apng
 =dev-python/humanfriendly-9*
 
 app-admin/opensnitch
-=dev-python/grpcio-tools-1.32*
+=dev-python/grpcio-tools-1.38*
 
 #empire
+dev-python/jq ~amd64
 =dev-python/python-socketio-5*
 =dev-python/python-engineio-4*
 
 #objection
 =dev-python/semver-2*
+
+#dev-ruby/nokogiri-1.11.4 requires >=dev-libs/libxml2-2.9.12
+=dev-python/lxml-4.6.3-r1
+=dev-libs/libxml2-2.9.12-r2

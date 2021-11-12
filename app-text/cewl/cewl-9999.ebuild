@@ -8,7 +8,7 @@ inherit ruby-ng
 
 DESCRIPTION="A custom word list generator"
 HOMEPAGE="http://www.digininja.org/projects/cewl.php"
-if [ "${PV}" = "9999" ]; then
+if [ "${PV}" == "9999" ]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/digininja/CeWL.git"
 	EGIT_CHECKOUT_DIR="${WORKDIR}/all/CeWL-${PV}"
@@ -28,13 +28,14 @@ ruby_add_rdepend "dev-ruby/nokogiri
 		dev-ruby/spider
 		dev-ruby/mini_exiftool
 		dev-ruby/rubyzip:*
-		dev-ruby/mime-types:*"
+		>=dev-ruby/mime-types-3.3.1:*"
 
 all_ruby_prepare() {
 	sed -i "s|require './cewl_lib'|require 'cewl_lib'|g" ${MY_P}/cewl.rb || die
 	sed -i "s|require_relative 'cewl_lib'|require 'cewl_lib'|g" ${MY_P}/cewl.rb || die
 	sed -i "s|require 'mime'|require 'mime/types'|g" ${MY_P}/cewl_lib.rb || die
-	#sed -i 's|zip|rubyzip|g' ${MY_P}/Gemfile
+	sed -i "/gem 'mime'/d" ${MY_P}/Gemfile || die
+	sed -i "/gem 'zip'/d" ${MY_P}/Gemfile || die
 	rm -f ${MY_P}/Gemfile.lock
 }
 
@@ -48,8 +49,6 @@ all_ruby_install() {
 }
 
 each_ruby_prepare() {
-	#https://github.com/digininja/CeWL/issues/73
-	true
-	#GEM_HOME="${T}" BUNDLE_GEMFILE=${MY_P}/Gemfile ${RUBY} -S bundle install --local || die
-	#GEM_HOME="${T}" BUNDLE_GEMFILE=${MY_P}/Gemfile ${RUBY} -S bundle check || die
+	GEM_HOME="${T}" BUNDLE_GEMFILE=${MY_P}/Gemfile ${RUBY} -S bundle install --local || die
+	GEM_HOME="${T}" BUNDLE_GEMFILE=${MY_P}/Gemfile ${RUBY} -S bundle check || die
 }

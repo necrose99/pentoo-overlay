@@ -34,7 +34,10 @@ net-wireless/suscan
 
 net-wireless/sdrangel
 
+=net-wireless/sdrplay-2.13*
+
 =net-wireless/gnuradio-3.8*
+net-wireless/gr-air-modes
 net-wireless/gr-ieee802154
 net-wireless/gr-rds
 ~net-wireless/gr-iio-0.3_p20191219
@@ -60,6 +63,10 @@ net-wireless/dump1090
 net-wireless/dump1090_sdrplus
 
 net-wireless/sdrtrunk-bin
+
+net-wireless/sdrtrunk
+dev-java/openjdk-bin:15
+virtual/jdk:15
 
 net-wireless/wireless-regdb
 

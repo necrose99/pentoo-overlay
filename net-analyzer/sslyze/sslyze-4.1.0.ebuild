@@ -4,7 +4,7 @@
 EAPI=7
 
 DISTUTILS_USE_SETUPTOOLS=rdepend
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..9} )
 inherit distutils-r1
 
 DESCRIPTION="Fast and full-featured SSL scanner"
@@ -19,8 +19,8 @@ IUSE="test"
 DEPEND=""
 RDEPEND="=dev-python/nassl-4*[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-2.6[${PYTHON_USEDEP}]
-	>=dev-python/tls_parser-1.2.2[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep 'dev-python/typing-extensions[${PYTHON_USEDEP}]' python3_7 )"
+	>=dev-python/tls_parser-1.2.2[${PYTHON_USEDEP}]"
+#	$(python_gen_cond_dep 'dev-python/typing-extensions[${PYTHON_USEDEP}]' python3_7 )"
 
 src_prepare(){
 	rm -r tests
