@@ -59,15 +59,18 @@ x11-libs/wxGTK:2.8
 <sys-apps/keyutils-1.5.9-r3
 <sys-devel/libtool-2.4.3-r2:2
 <sys-apps/attr-2.4.47-r2
+<sys-fs/udev-249.6-r2
 <sys-fs/udev-init-scripts-27
 <dev-lang/perl-5.34
 <sys-devel/gcc-7.3.0
 <sys-devel/llvm-11.1.0
 <sys-devel/clang-11.1.0
 <virtual/libcrypt-2
+<media-libs/harfbuzz-3.1.1
 
 #gentoo is deprecating this, why wait
 sys-fs/eudev
+sys-apps/hwids
 
 #This versions of binutils are known broken
 #run "emerge --update binutils" then remove the broken versions
@@ -140,3 +143,8 @@ dev-lang/lua:0
 
 #kill python 2.7
 <dev-libs/libgnt-2.14.3
+
+#breaks gnuradio:
+#https://bugs.gentoo.org/822966
+#https://bugs.gentoo.org/816453
+~media-libs/codec2-1.0.1

@@ -449,11 +449,20 @@ main_checks() {
   emerge --update --newuse --oneshot --changed-deps --newrepo portage || safe_exit
 
   #upgrade glibc first if we are using binpkgs
+  removeme14=$(portageq match / '<virtual/libcrypt-2')
+  if [ -n "${removeme14}" ]; then
+    printf "Removing old libcrypt-1 virtual to ease upgrade to libcrypt-2\n"
+    emerge -C "<virtual/libcrypt-2"
+  fi
   portage_features="$(portageq envvar FEATURES)"
   if [ "${portage_features}" != "${portage_features/getbinpkg//}" ]; then
     #learned something new, if a package updates before glibc and uses the newer glibc, the chance of breakage is
     #*much* higher than if glibc is updated first.  so let's just update glibc first.
     emerge --update --newuse --oneshot --changed-deps --newrepo glibc || safe_exit
+    # check if libcrypt is missing
+    if [ -z "$(portageq best_version / '>=virtual/libcrypt-2')" ]; then
+      emerge --update --newuse --oneshot --changed-deps --newrepo '>=virtual/libcrypt-2'
+    fi
   fi
 
   #modified from news item "Python ABIFLAGS rebuild needed"
@@ -550,6 +559,7 @@ main_checks() {
     printf "Deselecting deprecated eudev if it is selected\n"
     emerge --deselect sys-fs/eudev
   fi
+  #removeme14 used above before glibc install
 
   #before main upgrades, let's set a good java-vm
   set_java
