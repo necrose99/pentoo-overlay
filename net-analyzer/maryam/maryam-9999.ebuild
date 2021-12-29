@@ -40,8 +40,9 @@ else
 
 	SRC_URI="https://github.com/saeeddhqan/Maryam/archive/refs/tags/v.${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 
+S="${WORKDIR}/${PV}"
 src_prepare() {
-#S="${WORKDIR}/${PV}"
+
 # maryam-2.5.0/work/Maryam-v.2.5.0 # fixme... mv ${PN}-${PV} fix path tarball keeps path on unpack maryam fits gentoo M(*)armyam in M caped is orig product. 
 # Fix  example Maryam-v.2.5.0 to maryam.2.5.0 dir so python builds if symlinked.  to satable 
 
@@ -64,7 +65,14 @@ RDEPEND="dev-python/requests
 	dev-python/beautifulsoup:4
 	dev-python/flask 
 	dev-python/lxml
+	dev-python/matplotlib
+	dev-python/nltk
+	dev-python/pandas
+	dev-python/plotly
+	media-gfx/word_cloud
 	"
+	# more recent deps added 
+	#dev-python/vaderSentiment https://github.com/cjhutto/vaderSentiment recently add to do.. 
 
 #### more deps as project grows. 
 #Test_DEPEND # test? (dev-python/flake8 #   dev-python/black
