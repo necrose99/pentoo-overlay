@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 inherit python-single-r1
 
 DESCRIPTION="a tool for generating freedesktop-compliant menus"
@@ -24,7 +24,7 @@ fi
 
 #gnome-base/gnome-menus"
 DEPEND="${PYTHON_DEPS}
-		$(python_gen_cond_dep ' dev-python/lxml[${PYTHON_MULTI_USEDEP}] ')"
+		$(python_gen_cond_dep ' dev-python/lxml[${PYTHON_USEDEP}] ')"
 RDEPEND="${DEPEND}"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 

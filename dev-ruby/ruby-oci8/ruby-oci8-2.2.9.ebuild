@@ -1,8 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-USE_RUBY="ruby26"
+USE_RUBY="ruby26 ruby27"
 
 inherit multilib ruby-fakegem
 
@@ -17,8 +17,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="dev-db/oracle-instantclient-basic"
-DEPEND="dev-db/oracle-instantclient-basic"
+RDEPEND="dev-db/oracle-instantclient"
+DEPEND="dev-db/oracle-instantclient"
 
 EXT_DIR="ext/oci8"
 

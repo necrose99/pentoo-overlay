@@ -26,19 +26,19 @@ dev-ruby/autoprefixer-rails:10
 
 #rails 6.0
 ~app-eselect/eselect-rails-0.25
-~dev-ruby/actioncable-6.0.4.1
-~dev-ruby/actionmailbox-6.0.4.1
-~dev-ruby/actionmailer-6.0.4.1
-~dev-ruby/actionpack-6.0.4.1
-~dev-ruby/actiontext-6.0.4.1
-~dev-ruby/actionview-6.0.4.1
-~dev-ruby/activejob-6.0.4.1
-~dev-ruby/activemodel-6.0.4.1
-~dev-ruby/activerecord-6.0.4.1
-~dev-ruby/activestorage-6.0.4.1
-~dev-ruby/activesupport-6.0.4.1
-~dev-ruby/rails-6.0.4.1
-~dev-ruby/railties-6.0.4.1
+~dev-ruby/actioncable-6.0.4.4
+~dev-ruby/actionmailbox-6.0.4.4
+~dev-ruby/actionmailer-6.0.4.4
+~dev-ruby/actionpack-6.0.4.4
+~dev-ruby/actiontext-6.0.4.4
+~dev-ruby/actionview-6.0.4.4
+~dev-ruby/activejob-6.0.4.4
+~dev-ruby/activemodel-6.0.4.4
+~dev-ruby/activerecord-6.0.4.4
+~dev-ruby/activestorage-6.0.4.4
+~dev-ruby/activesupport-6.0.4.4
+~dev-ruby/rails-6.0.4.4
+~dev-ruby/railties-6.0.4.4
 =dev-ruby/marcel-1.0*
 
 #ruby24
@@ -82,6 +82,7 @@ dev-ruby/windows_error
 ~dev-ruby/pg-0.20.0
 ~dev-ruby/regexp_parser-0.4.3
 dev-ruby/metasploit_payloads-mettle
+dev-ruby/metasploit-model
 =dev-ruby/rexml-3.2*
 dev-ruby/rex-core
 dev-ruby/rex-socket
@@ -95,7 +96,7 @@ dev-ruby/rex-random_identifier
 dev-ruby/rex-text
 dev-ruby/bit-struct
 =dev-ruby/sshkey-2.0*
-=dev-ruby/msgpack-1.3*
+=dev-ruby/msgpack-1*
 dev-ruby/rkelly-remix
 ~dev-ruby/filesize-0.2.0
 =dev-ruby/metasm-1.0*

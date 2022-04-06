@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit eutils python-single-r1
 
@@ -25,10 +25,10 @@ SLOT="0"
 
 RDEPEND="${PYTHON_DEPS}
 	$(python_gen_cond_dep '
-		>=dev-python/argcomplete-1.10.0[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/python-crontab-2.3.9[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/requests-2.18.4[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/termcolor-1.1.0[${PYTHON_MULTI_USEDEP}]
+		>=dev-python/argcomplete-1.10.0[${PYTHON_USEDEP}]
+		>=dev-python/python-crontab-2.3.9[${PYTHON_USEDEP}]
+		>=dev-python/requests-2.18.4[${PYTHON_USEDEP}]
+		>=dev-python/termcolor-1.1.0[${PYTHON_USEDEP}]
 	')"
 DEPEND="${RDEPEND}"
 

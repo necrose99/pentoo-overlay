@@ -12,10 +12,10 @@ net-wireless/libxtrx soapy
 net-wireless/libxtrxll usb3380
 net-wireless/lorcon python -ruby
 net-wireless/rtl_433 soapysdr
-net-wireless/srslte bladerf simcard soapysdr uhd zeromq
+net-wireless/srsran bladerf simcard soapysdr uhd zeromq
 net-wireless/soapysdr bladerf hackrf rtlsdr plutosdr uhd python
 net-wireless/uhd examples
 net-wireless/urh audio bladerf hackrf limesdr plutosdr rtlsdr uhd
 net-wireless/wifite extra dict
 net-analyzer/wireshark lua
-net-wireless/wpa_supplicant ap eap-sim macsec tdls uncommon-eap-types p2p wps
+net-wireless/wpa_supplicant ap eap-sim macsec p2p tdls tkip uncommon-eap-types wep wps

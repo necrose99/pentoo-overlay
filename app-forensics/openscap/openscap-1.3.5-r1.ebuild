@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit cmake python-single-r1
 
@@ -44,8 +44,8 @@ RDEPEND="
 	)
 	python? ( ${PYTHON_DEPS}
 		$(python_gen_cond_dep '
-			dev-python/docker-py[${PYTHON_MULTI_USEDEP}]
-			docker? ( dev-python/requests[${PYTHON_MULTI_USEDEP}] )
+			dev-python/docker-py[${PYTHON_USEDEP}]
+			docker? ( dev-python/requests[${PYTHON_USEDEP}] )
 		')
 	)
 	rpm? ( app-arch/rpm )

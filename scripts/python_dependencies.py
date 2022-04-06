@@ -21,9 +21,11 @@ def portage_mapping(search):
     mapping =  {
         "dev-python/androguard": "dev-util/androguard",
         "dev-python/bs4": "dev-python/beautifulsoup4",
+        "dev-python/Brotli": "app-arch/brotli[python]",
         "dev-python/capstone": "dev-libs/capstone[python]",
         "dev-python/colored_traceback": "dev-python/colored-traceback",
         "dev-python/iptools": "dev-python/python-iptools",
+        "dev-python/IPy": "dev-python/ipy",
         "dev-python/Django": "dev-python/django",
         "dev-python/flask-BabelEx": "dev-python/flask-babelex",
         "dev-python/Flask": "dev-python/flask",
@@ -47,6 +49,7 @@ def portage_mapping(search):
         "dev-python/flask-SocketIO": "dev-python/flask-socketio",
         "dev-python/PyJWT": "dev-python/pyjwt",
         "dev-python/psycopg2-binary": "dev-python/psycopg",
+        "dev-python/psycopg2": "dev-python/psycopg",
         "dev-python/redis": "dev-python/redis-py",
         "dev-python/ropgadget": "app-exploits/ropgadget",
         "dev-python/ruamel.yaml": "dev-python/ruamel-yaml",
@@ -56,7 +59,9 @@ def portage_mapping(search):
         "dev-python/tls-parser": "dev-python/tls_parser",
         "dev-python/tornado": "www-servers/tornado",
         "dev-python/unicorn": "dev-util/unicorn[python]",
-        "dev-python/importlib-metadata": "dev-python/importlib_metadata"
+        "dev-python/importlib-metadata": "dev-python/importlib_metadata",
+        "dev-python/wordcloud": "media-gfx/word_cloud",
+        "dev-python/flask_caching": "dev-python/flask-caching"
     }
 
     for key in mapping:
@@ -65,7 +70,7 @@ def portage_mapping(search):
 
 def pyproject_toml():
     try:
-        with open('./pyproject.toml') as f:
+        with open('./pyproject.toml', 'rb') as f:
             dependencies = tomli.load(f)['tool']['poetry']['dependencies']
     except FileNotFoundError:
         return 1

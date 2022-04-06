@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit autotools flag-o-matic python-single-r1
 
@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 	sys-devel/libtool
 	test? (
 		dev-util/valgrind
-		$(python_gen_cond_dep 'dev-python/matplotlib[${PYTHON_MULTI_USEDEP}]')
+		$(python_gen_cond_dep 'dev-python/matplotlib[${PYTHON_USEDEP}]')
 	)"
 
 pkg_setup() {

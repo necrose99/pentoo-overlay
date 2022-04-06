@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -115,13 +115,11 @@ RUBY_COMMON_DEPEND="virtual/ruby-ssl
 			dev-ruby/pry
 			dev-ruby/redcarpet
 			dev-ruby/yard
-			>=dev-ruby/rake-10.0.0
-			>=dev-ruby/factory_girl-4.1.0 )"
+			>=dev-ruby/rake-10.0.0 )"
 	#lorcon doesn't support ruby21
 	#lorcon? ( net-wireless/lorcon[ruby] )
 ruby_add_bdepend "${RUBY_COMMON_DEPEND}
-		test? ( >=dev-ruby/factory_girl-4.1.0
-			dev-ruby/fivemat
+		test? ( dev-ruby/fivemat
 			dev-ruby/database_cleaner
 			>=dev-ruby/rspec-2.12
 			dev-ruby/shoulda-matchers

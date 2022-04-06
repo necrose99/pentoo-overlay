@@ -1,8 +1,8 @@
+net-wireless/dsd
+
 =net-wireless/trunk-recorder-4*
 
 net-wireless/create_ap
-
-net-wireless/dsdcc
 
 net-wireless/wifipumpkin3
 
@@ -33,8 +33,6 @@ net-wireless/sigdigger
 net-wireless/suwidgets
 net-wireless/sigutils
 net-wireless/suscan
-
-net-wireless/sdrangel
 
 =net-wireless/sdrplay-2.13*
 
@@ -73,7 +71,6 @@ net-wireless/wireless-regdb
 net-wireless/blueman
 
 net-wireless/bladerf
-net-wireless/yatebts
 net-wireless/bladerf-firmware
 net-wireless/bladerf-fpga
 net-wireless/hackrf-tools
@@ -97,12 +94,12 @@ net-wireless/kismetmobiledashboard
 
 net-wireless/multimode
 
+net-wireless/srsran
 
 #below here likely needs cleanup
 #### Gentoo (to be cleaned)
 
 net-wireless/lorcon
-net-wireless/srslte
 net-wireless/gr-scan
 net-wireless/limesuite
 net-wireless/rfcat

@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 inherit python-single-r1 git-r3
 
 DESCRIPTION="An intentionally designed broken web application based on REST API"
@@ -24,7 +24,7 @@ RDEPEND="$(python_gen_cond_dep '
 	dev-python/python-oauth2[${PYTHON_USEDEP}]
 	dev-python/pyjwt[${PYTHON_USEDEP}]
 	')"
-#	dev-python/oauth[${PYTHON_MULTI_USEDEP}]
+#	dev-python/oauth[${PYTHON_USEDEP}]
 
 src_install() {
 	dodir /opt/Tiredful-API

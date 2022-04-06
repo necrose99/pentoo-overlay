@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 inherit python-single-r1
 
 HASH_COMMIT="fc989b1b9e8869f9182922dcafd58a1f30cb8973"
@@ -20,8 +20,8 @@ IUSE=""
 DEPEND=""
 RDEPEND="media-libs/libextractor
 	$(python_gen_cond_dep '
-	dev-python/requests[${PYTHON_MULTI_USEDEP}]
-	dev-python/googlesearch[${PYTHON_MULTI_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/googlesearch[${PYTHON_USEDEP}]
 	')
 "
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"

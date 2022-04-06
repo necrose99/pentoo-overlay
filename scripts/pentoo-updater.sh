@@ -214,7 +214,7 @@ rebuild_lib32() {
 
 update_kernel() {
   #bigger updates can fail, so make sure at least all this stuff is up to date
-  emerge --update sys-kernel/pentoo-sources sys-kernel/genkernel sys-kernel/linux-firmware sys-firmware/intel-microcode --oneshot || safe_exit
+  emerge --update virtual/linux-sources sys-kernel/genkernel sys-kernel/linux-firmware sys-firmware/intel-microcode --oneshot || safe_exit
   bestkern="$(qlist $(portageq best_version / pentoo-sources 2> /dev/null) | grep 'distro/Kconfig' | awk -F'/' '{print $4}' | cut -d'-' -f 2-)"
   bestkern_pv="$(portageq best_version / pentoo-sources | cut -d'-' -f 4-)"
   if [ -z "${bestkern}" ]; then
@@ -645,11 +645,20 @@ umount_boot
 #we need to do the clean BEFORE we drop the extra flags otherwise all the packages we just built are removed
 currkern="$(uname -r)"
 if [ "${currkern/pentoo/}" != "${currkern}" ]; then
-  EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean --exclude "sys-kernel/pentoo-sources:${currkern/-pentoo/}" || safe_exit
+  exclude="sys-kernel/pentoo-sources:${currkern/-pentoo/}"
 elif [ "${currkern/gentoo/}" != "${currkern}" ]; then
-  EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean --exclude "sys-kernel/gentoo-sources:${currkern/-gentoo/}" || safe_exit
+  exclude="sys-kernel/pentoo-sources:${currkern/-pentoo/}"
+fi
+if [ -n "${exclude:-}" ]; then
+  if ! EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean --exclude "${exclude}"; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @world
+    EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean --exclude "${exclude}" || safe_exit
+  fi
 else
-  EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean || safe_exit
+  if ! EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @world
+    EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS/--verbose /}" emerge --depclean || safe_exit
+  fi
 fi
 set_java || export WE_FAILED=1 #only tell the updater that this failed if it's still failing at the end
 set_ruby || export WE_FAILED=1

@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
@@ -32,11 +32,11 @@ DEPEND="${PYTHON_DEPS}"
 RDEPEND="${DEPEND}
 	dev-libs/libgcrypt:=
 	$(python_gen_cond_dep '
-		>=net-analyzer/scapy-2.4.0_p20180626[${PYTHON_MULTI_USEDEP}]
-		dev-python/pyserial[${PYTHON_MULTI_USEDEP}]
-		dev-python/pyusb[${PYTHON_MULTI_USEDEP}]
-		dev-python/pycryptodome[${PYTHON_MULTI_USEDEP}]
-		dev-python/rangeparser[${PYTHON_MULTI_USEDEP}]
+		>=net-analyzer/scapy-2.4.0_p20180626[${PYTHON_USEDEP}]
+		dev-python/pyserial[${PYTHON_USEDEP}]
+		dev-python/pyusb[${PYTHON_USEDEP}]
+		dev-python/pycryptodome[${PYTHON_USEDEP}]
+		dev-python/rangeparser[${PYTHON_USEDEP}]
 	')"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 

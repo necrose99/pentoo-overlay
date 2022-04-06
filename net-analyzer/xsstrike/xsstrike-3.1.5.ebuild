@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit eutils python-single-r1
 
@@ -26,10 +26,10 @@ SLOT="0"
 DEPEND="${PYTHON_DEPS}"
 RDEPEND="${DEPEND}
 	$(python_gen_cond_dep '
-		dev-python/tld[${PYTHON_MULTI_USEDEP}]
-		dev-python/fuzzywuzzy[${PYTHON_MULTI_USEDEP}]
-		dev-python/requests[${PYTHON_MULTI_USEDEP}]
-		dev-python/selenium[${PYTHON_MULTI_USEDEP}]
+		dev-python/tld[${PYTHON_USEDEP}]
+		dev-python/fuzzywuzzy[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
+		dev-python/selenium[${PYTHON_USEDEP}]
 	')"
 
 pkg_setup() {

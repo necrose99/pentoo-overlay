@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit eutils python-single-r1
 
@@ -25,11 +25,11 @@ SLOT="0"
 
 RDEPEND="${PYTHON_DEPS}
 	$(python_gen_cond_dep '
-		app-admin/awscli[${PYTHON_MULTI_USEDEP}]
-		dev-python/boto3[${PYTHON_MULTI_USEDEP}]
-		dev-python/coloredlogs[${PYTHON_MULTI_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_MULTI_USEDEP}]
-		dev-python/requests[${PYTHON_MULTI_USEDEP}]
+		app-admin/awscli[${PYTHON_USEDEP}]
+		dev-python/boto3[${PYTHON_USEDEP}]
+		dev-python/coloredlogs[${PYTHON_USEDEP}]
+		dev-python/pytest-xdist[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
 	')"
 DEPEND="${RDEPEND}"
 

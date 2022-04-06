@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -21,7 +21,7 @@ IUSE="aff doc +beviewer +ewf +exiv2 hashdb rar"
 
 RDEPEND="
 	aff? ( app-forensics/afflib )
-	dev-libs/boost[threads]
+	dev-libs/boost
 	dev-libs/expat
 	dev-libs/openssl:0=
 	dev-db/sqlite:3

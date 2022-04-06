@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit eutils python-single-r1
 
@@ -22,7 +22,7 @@ LICENSE="MIT"
 SLOT="0"
 
 RDEPEND="
-	$(python_gen_cond_dep 'dev-python/pygments[${PYTHON_MULTI_USEDEP}]')
+	$(python_gen_cond_dep 'dev-python/pygments[${PYTHON_USEDEP}]')
 	sys-devel/gdb[python]"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
