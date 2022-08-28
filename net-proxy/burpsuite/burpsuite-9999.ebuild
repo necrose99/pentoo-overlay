@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit desktop java-pkg-2 xdg
 
@@ -32,6 +32,7 @@ LICENSE="BURP"
 SLOT="0"
 IUSE=""
 
+BDEPEND="app-arch/zip"
 DEPEND=""
 RDEPEND=">=virtual/jre-11"
 
@@ -41,10 +42,17 @@ src_unpack() {
 	cp "${DISTDIR}/${A}" "${S}"
 }
 
+src_prepare() {
+	default
+	#clean out the cruft
+	zip -d burpsuite*.jar chromium-win*.zip || die
+	zip -d burpsuite*.jar chromium-macos*.zip || die
+}
+
 src_install() {
 	java-pkg_jarinto /opt/"${PN}"
 	java-pkg_newjar "${MY_P}"
-	java-pkg_dolauncher "${PN}" --java_args "-Xmx2G -Dawt.useSystemAAFontSettings=on"
+	java-pkg_dolauncher "${PN}" --java_args "-Xmx2G -Dawt.useSystemAAFontSettings=on --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED"
 
 	if [[ "${PN}" == *"pro" ]]; then
 		domenu "${FILESDIR}"/${PN}.desktop

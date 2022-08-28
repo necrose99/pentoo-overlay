@@ -14,7 +14,6 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
-IUSE="test"
 
 RDEPEND="	>=dev-python/asn1crypto-1.0.0[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}

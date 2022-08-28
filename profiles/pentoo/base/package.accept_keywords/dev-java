@@ -18,6 +18,7 @@ dev-java/jetty-server
 dev-java/logback
 
 dev-java/openjdk-bin:15
-virtual/jdk:15
-dev-java/openjdk-bin:17
 virtual/jdk:17
+
+#https://bugs.gentoo.org/853136
+=dev-java/reflections-0.9.12-r3

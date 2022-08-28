@@ -21,19 +21,23 @@ net-wireless/madwifi-ng-tools
 <net-analyzer/wireshark-2.6.3
 
 #force qt update
-<dev-qt/qtprintsupport-5.15.1
-<dev-qt/qtxmlpatterns-5.15.1
-<dev-qt/qtbluetooth-5.15.1
-<dev-qt/qtnetwork-5.15.1
-<dev-qt/qtwidgets-5.15.1
-<dev-qt/qtcharts-5.15.1
-<dev-qt/qtopengl-5.15.1
-<dev-qt/qtcore-5.15.1
-<dev-qt/qtdbus-5.15.1
-<dev-qt/qtgui-5.15.1
-<dev-qt/qtsvg-5.15.1
-<dev-python/pyside2-5.15.1
-<dev-python/shiboken2-5.15.1
+<dev-qt/qtprintsupport-5.15.5
+<dev-qt/qtxmlpatterns-5.15.5
+<dev-qt/qtbluetooth-5.15.5
+<dev-qt/qtnetwork-5.15.5
+<dev-qt/qtwidgets-5.15.5
+<dev-qt/qtcharts-5.15.5
+<dev-qt/qtopengl-5.15.5
+<dev-qt/qtcore-5.15.5
+<dev-qt/qtdbus-5.15.5
+<dev-qt/qtgui-5.15.5
+<dev-qt/qtsvg-5.15.5
+<dev-qt/qtwebchannel-5.15.5
+<dev-qt/qtwebsockets-5.15.5
+<dev-qt/qtlocation-5.15.5
+<dev-qt/qtspeech-5.15.5
+<dev-python/pyside2-5.15.5
+<dev-python/shiboken2-5.15.5
 
 #kill old ruby
 dev-lang/ruby:2.1
@@ -43,6 +47,9 @@ dev-lang/ruby:2.4
 dev-lang/ruby:2.5
 <virtual/rubygems-14
 <dev-ruby/did_you_mean-1.1.0
+
+#mask until rails:6.1 and dev-ruby/act*:6.1 would be stable too
+dev-ruby/activesupport:6.1
 
 #disable sudo
 #https://github.com/rubygems/rubygems/issues/4031
@@ -108,16 +115,13 @@ sci-libs/mkl
 #help portage know that this old stuff has to go
 <dev-libs/openssl-1.1.1
 
-#https://bugs.gentoo.org/684734
-~dev-python/pydispatcher-2.1.2
-
 #help upgrade to gnuradio 3.8.1.0
 dev-python/cheetah
 <dev-python/numpy-1.17
 <net-wireless/gnuradio-3.8.1.0
 
 #no wpe patches yet
->=net-dialup/freeradius-3.0.22
+>net-dialup/freeradius-3.2.0
 
 # It's a very unstable package
 net-analyzer/osmedeus
@@ -146,3 +150,12 @@ dev-lang/lua:0
 #https://bugs.gentoo.org/822966
 #https://bugs.gentoo.org/816453
 ~media-libs/codec2-1.0.1
+
+#okay so this still doesn't work and seems to be riddled with Internal Compiler Errors
+=sys-devel/gcc-arm-none-eabi-11.2_p202202-r2
+
+#https://github.com/intoolswetrust/jd-cli/issues/81
+>dev-java/jcommander-1.32
+
+#stop constant downgrades
+<dev-cpp/abseil-cpp-20211102.0

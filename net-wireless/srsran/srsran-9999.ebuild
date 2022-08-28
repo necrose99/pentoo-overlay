@@ -14,7 +14,8 @@ HOMEPAGE="https://srs.io"
 #https://bugs.gentoo.org/733662
 #https://bugs.gentoo.org/832618
 
-if [ "${PV}" = "9999" ]; then
+if [[ "${PV}" == "9999" ]]; then
+	KEYWORDS=""
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/srsran/srsRAN.git"
 else
@@ -24,7 +25,6 @@ else
 	SRC_URI="https://github.com/srsran/srsRAN/archive/refs/tags/release_${MY_PV}.tar.gz -> ${P}.tar.gz"
 fi
 #https://github.com/srsran/srsRAN/issues/834
-#https://github.com/srsran/srsRAN/issues/835
 RESTRICT="test"
 
 LICENSE="GPL-3"
@@ -33,6 +33,7 @@ IUSE="bladerf simcard soapysdr test uhd zeromq"
 
 DEPEND="
 	dev-libs/boost:=
+	dev-libs/elfutils
 	dev-libs/libconfig:=[cxx]
 	net-misc/lksctp-tools
 	net-libs/mbedtls:=
@@ -46,6 +47,8 @@ DEPEND="
 RDEPEND="${DEPEND}
 		!net-wireless/srslte"
 BDEPEND="virtual/pkgconfig"
+
+PATCHES=( "${FILESDIR}/srsran-22.04-fix-shared.patch" )
 
 src_prepare() {
 	sed -i '/ -Werror"/d' CMakeLists.txt || die

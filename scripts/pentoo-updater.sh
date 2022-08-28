@@ -83,6 +83,11 @@ setup_env() {
 }
 
 set_java() {
+  have_java=$(portageq match / 'app-eselect/eselect-java')
+  if [ -z "${have_java}" ]; then
+    printf "System doesn't have java, skipping java config.\n"
+    return 1
+  fi
   java_system=$(eselect java-vm show system | tail -n 1 | tr -d " ")
   if [ "${java_system/11/}" != "${java_system}" ]; then
     return 0
@@ -103,9 +108,15 @@ set_java() {
 }
 
 set_ruby() {
+  if portageq has_version / dev-lang/ruby:2.7; then
+    eselect ruby set ruby27
+    return 0
+  fi
   if portageq has_version / dev-lang/ruby:2.6; then
     eselect ruby set ruby26
+    return 0
   fi
+  return 1
 }
 
 check_profile () {
@@ -378,10 +389,6 @@ main_checks() {
     mkdir -p /var/log/portage/emerge-info/
     emerge --info > /var/log/portage/emerge-info/emerge-info-$(date "+%Y%m%d").txt
   else #we are on a user system
-    #if [[ -z "$(eselect python show)" || ! -f "/usr/bin/$(eselect python show)" ]]; then
-    #  eselect python update
-    #fi
-    #eselect python cleanup
     [ "${NO_SYNC}" = "true" ] || do_sync
     check_profile
     if [ -d /var/db/repos/pentoo ] && [ -d /var/lib/layman/pentoo ]; then
@@ -404,11 +411,10 @@ main_checks() {
   fi
 
   #deep checks for python, including fix
-  RESET_PYTHON=0
   #first we set the python interpreters to match PYTHON_TARGETS (and ensure the versions we set are actually built)
   PYTHON2=$(emerge --info | grep -oE '^PYTHON_TARGETS\=".*(python[23]_[0-9]\s*)+"' | grep -oE 'python2_[0-9]' | cut -d\" -f2 | cut -d" " -f 1 |sed 's#_#.#')
   #PYTHON_SINGLE_TARGET is the *main* python3 implementation
-  PYTHON3=$(emerge --info | grep -oE '^PYTHON_SINGLE_TARGET\=".*(python3_[0-9]\s*)+"' | grep -oE 'python3_[0-9]' | cut -d\" -f2 | sed 's#_#.#')
+  PYTHON3=$(emerge --info | grep -oE '^PYTHON_SINGLE_TARGET\=".*(python3_[0-9]+\s*)+"' | grep -oE 'python3_[0-9]+' | cut -d\" -f2 | sed 's#_#.#')
   if [ -z "${PYTHON2}" ]; then
     printf "Detected Python 2 is disabled\n"
     printf "From PYTHON_TARGETS: $(emerge --info | grep '^PYTHON_TARGETS')\n"
@@ -422,27 +428,11 @@ main_checks() {
     printf "This is fatal, python3 support is required, it is $(date +'%Y')\n"
     exit 1
   fi
-  #set default implementation
-  #eselect python set "${PYTHON3}"
-  #set python 3 implementation
-  #if eselect python list --python3 | grep -q "${PYTHON3}"; then
-  #  eselect python set --python3 "${PYTHON3}" || safe_exit
-  #else
-  #  printf "System wants ${PYTHON3} as default python3 version but it isn't installed yet.\n"
-  #  RESET_PYTHON=1
-  #fi
   "${PYTHON3}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON3#python}"
 
   #fix python2, if it's even requested
   if [ -n "${PYTHON2}" ]; then
-    # set python 2 implementation if requested
-    #if eselect python list --python2 | grep -q "${PYTHON2}"; then
-    #  eselect python set --python2 "${PYTHON2}" || safe_exit
-      "${PYTHON2}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON2#python}"
-    #else
-    #  printf "System wants ${PYTHON2} as default python2 version but it isn't installed yet.\n"
-    #  RESET_PYTHON=1
-    #fi
+    "${PYTHON2}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON2#python}"
   fi
 
   #always update portage as early as we can (after making sure python works)
@@ -578,15 +568,6 @@ main_upgrades() {
   set_java #might fail, run it a few times
   set_ruby
 
-  if [ ${RESET_PYTHON} = 1 ]; then
-    #eselect python set --python3 "${PYTHON3}" || safe_exit
-    "${PYTHON3}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON3#python}"
-    if [ -n "${PYTHON2}" ]; then
-      #eselect python set --python2 "${PYTHON2}" || safe_exit
-      "${PYTHON2}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON2#python}"
-    fi
-  fi
-
   #if we are in catalyst, update the extra binpkgs
   if [ -n "${clst_target}" ]; then
     mkdir -p /etc/portage/profile
@@ -632,15 +613,14 @@ umount_boot() {
 }
 
 #execution begins here
+mount_boot
 main_checks
 
-mount_boot
 if [ -z "${KERNEL_ONLY}" ]; then
   main_upgrades
 else
   emerge --update sys-kernel/pentoo-sources sys-kernel/genkernel sys-kernel/linux-firmware sys-firmware/intel-microcode --oneshot || safe_exit
 fi
-umount_boot
 
 #we need to do the clean BEFORE we drop the extra flags otherwise all the packages we just built are removed
 currkern="$(uname -r)"
@@ -666,6 +646,7 @@ set_ruby || export WE_FAILED=1
 if portageq list_preserved_libs /; then
   FEATURES="-getbinpkg" emerge @preserved-rebuild --usepkg=n --buildpkg=y || safe_exit
 fi
+umount_boot
 
 if [ -n "${clst_target}" ]; then
   if [ -n "${debugshell}" ]; then
@@ -673,7 +654,7 @@ if [ -n "${clst_target}" ]; then
   fi
   etc-update --automode -5 || safe_exit
   fixpackages || safe_exit
-  eclean-pkg || safe_exit
+  eclean-pkg --unique-use || safe_exit
   #this is already run as part of eclean-pkg
   #emaint --fix binhost || safe_exit
   #remove kde/mate use flags, and pentoo-extra
