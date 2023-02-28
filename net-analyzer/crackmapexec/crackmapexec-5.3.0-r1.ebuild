@@ -3,8 +3,9 @@
 
 EAPI=7
 
-DISTUTILS_USE_SETUPTOOLS=pyproject.toml
-PYTHON_COMPAT=( python3_{9..10} )
+DISTUTILS_USE_PEP517=poetry
+PYTHON_COMPAT=( python3_{10..11} )
+
 inherit python-utils-r1 distutils-r1
 
 DESCRIPTION="A swiss army knife for pentesting Windows/Active Directory environments"

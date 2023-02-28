@@ -3,8 +3,8 @@
 
 EAPI=7
 
-DISTUTILS_USE_SETUPTOOLS=pyproject.toml
-PYTHON_COMPAT=( python3_{9..10} )
+DISTUTILS_USE_PEP517=flit
+PYTHON_COMPAT=( python3_{10..11} )
 #may be not stricly required
 PYTHON_REQ_USE="threads(+)"
 

@@ -6,7 +6,7 @@ dev-python/rangeparser
 
 dev-python/cmake-converter
 
-~dev-python/pyotherside-1.5.9 ~amd64
+~dev-python/pyotherside-1.6.0 ~amd64
 
 #gentoo is just old as shit
 #apple_bleee
@@ -51,11 +51,6 @@ dev-python/pywerview
 ~dev-python/pysvn-1.7.8
 =dev-python/intervaltree-3.1*
 
-#gnuradio
-~dev-python/markdown-2.1.1
-~dev-python/pybind11-2.5.0
-~dev-python/breathe-4.14.1
-
 #required by wapiti
 ~dev-python/requests-1.2.3
 ~dev-python/charade-1.0.3
@@ -64,10 +59,12 @@ dev-python/pywerview
 =dev-python/requests-ntlm-1.1*
 =dev-python/ntlm-auth-1*
 
-#requied by mitmproxy
+#required by mitmproxy
 dev-python/publicsuffix amd64
 dev-python/pyopenssl amd64
 dev-python/protobuf-python amd64
+dev-python/kaitaistruct amd64
+dev-python/mitmproxy_wireguard amd64
 
 # required by net-misc/sherlock
 
@@ -178,11 +175,13 @@ dev-python/aiomultiprocess
 dev-python/aiosqlite
 =dev-python/starlette-0.19*
 =dev-python/starlette-0.20*
+=dev-python/starlette-0.21*
+=dev-python/python-multipart-0.0*
 #testing
 dev-python/fastapi
 dev-python/limits
 dev-python/orjson-bin
-=dev-python/aiofiles-0.8*
+=dev-python/aiofiles-22*
 dev-python/slowapi
 
 #Gentoo unstable
@@ -311,6 +310,7 @@ dev-python/oscrypto
 dev-python/http-tools
 dev-python/IP2Location
 ~dev-python/wcmatch-8.3
+~dev-python/plotly-5.10.0
 
 # required by net-analyzer/s3scanner
 ~dev-python/coloredlogs-10.0
@@ -354,7 +354,7 @@ dev-python/apng
 =dev-python/humanfriendly-9*
 
 app-admin/opensnitch
-=dev-python/grpcio-tools-1.43*
+=dev-python/grpcio-tools-1.51*
 
 #empire
 dev-python/jq ~amd64
@@ -384,3 +384,12 @@ dev-python/pyvnc
 #sslyze test
 =dev-python/Faker-13.15*
 =dev-python/validators-0.20*
+
+#required by winacl
+~dev-python/cryptography-38.0.1
+
+#dev-python/jsbeautifier
+~dev-python/editorconfig-core-py-0.12.3
+
+#required by androguard
+dev-python/pydot amd64

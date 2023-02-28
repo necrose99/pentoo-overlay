@@ -89,10 +89,10 @@ set_java() {
     return 1
   fi
   java_system=$(eselect java-vm show system | tail -n 1 | tr -d " ")
-  if [ "${java_system/11/}" != "${java_system}" ]; then
+  if [ "${java_system/17/}" != "${java_system}" ]; then
     return 0
   fi
-  wanted_java=$(eselect java-vm list | grep --color=never 11 | tr -d "[]" | awk '{print $2,$1}' | sort | head -n 1 | awk '{print $2}')
+  wanted_java=$(eselect java-vm list | grep --color=never 17 | tr -d "[]" | awk '{print $2,$1}' | sort | head -n 1 | awk '{print $2}')
   if [ -n "${wanted_java}" ]; then
     if eselect java-vm set system "${wanted_java}"; then
       printf "Successfully set system java vm\n"
@@ -102,7 +102,7 @@ set_java() {
       return 1
     fi
   else
-    printf "Failed to detect available jdk-11\n"
+    printf "Failed to detect available jdk-17\n"
     return 0
   fi
 }
@@ -299,7 +299,7 @@ update_kernel() {
   fi
 
   #then we set genkernel options as needed
-  genkernelopts="--kernel-config=/usr/share/pentoo-sources/config-${ARCH}-${bestkern_pv} --compress-initramfs-type=xz --bootloader=grub2 --save-config --kernel-filename=kernel-genkernel-%%ARCH%%-%%KV%% --initramfs-filename=initramfs-genkernel-%%ARCH%%-%%KV%% --systemmap-filename=System.map-genkernel-%%ARCH%%-%%KV%% --kernel-localversion=UNSET --module-rebuild --save-config --no-microcode-initramfs"
+  genkernelopts="--kernel-config=/usr/share/pentoo-sources/config-${ARCH}-${bestkern_pv} --compress-initramfs-type=zstd --bootloader=grub2 --save-config --kernel-filename=kernel-genkernel-%%ARCH%%-%%KV%% --initramfs-filename=initramfs-genkernel-%%ARCH%%-%%KV%% --systemmap-filename=System.map-genkernel-%%ARCH%%-%%KV%% --kernel-localversion=UNSET --module-rebuild --save-config --no-microcode-initramfs --check-free-disk-space-bootdir=50"
   if grep -q btrfs /etc/fstab || grep -q btrfs /proc/cmdline; then
     genkernelopts="${genkernelopts} --btrfs"
   fi
@@ -355,7 +355,7 @@ do_sync() {
   fi
 
   # People seem to break these permissions a lot, so just set them.  it takes <3 seconds on my box
-  chown portage.portage -R /var/db/repos/{gentoo,pentoo}
+  chown portage:portage -R /var/db/repos/{gentoo,pentoo}
   if ! emerge --sync; then
     if [ -e /etc/portage/repos.conf/pentoo.conf ] && grep -q pentoo.asc /etc/portage/repos.conf/pentoo.conf; then
       printf "Pentoo repo key incorrectly defined, fixing..."
@@ -412,9 +412,9 @@ main_checks() {
 
   #deep checks for python, including fix
   #first we set the python interpreters to match PYTHON_TARGETS (and ensure the versions we set are actually built)
-  PYTHON2=$(emerge --info | grep -oE '^PYTHON_TARGETS\=".*(python[23]_[0-9]\s*)+"' | grep -oE 'python2_[0-9]' | cut -d\" -f2 | cut -d" " -f 1 |sed 's#_#.#')
+  PYTHON2=$(emerge --info | grep -oE '^PYTHON_TARGETS=".*(python[23]_[0-9]\s*)+"' | grep -oE 'python2_[0-9]' | cut -d\" -f2 | cut -d" " -f 1 |sed 's#_#.#')
   #PYTHON_SINGLE_TARGET is the *main* python3 implementation
-  PYTHON3=$(emerge --info | grep -oE '^PYTHON_SINGLE_TARGET\=".*(python3_[0-9]+\s*)+"' | grep -oE 'python3_[0-9]+' | cut -d\" -f2 | sed 's#_#.#')
+  PYTHON3=$(emerge --info | grep -oE '^PYTHON_SINGLE_TARGET=".*(python3_[0-9]+\s*)+"' | grep -oE 'python3_[0-9]+' | cut -d\" -f2 | sed 's#_#.#')
   if [ -z "${PYTHON2}" ]; then
     printf "Detected Python 2 is disabled\n"
     printf "From PYTHON_TARGETS: $(emerge --info | grep '^PYTHON_TARGETS')\n"
@@ -438,21 +438,26 @@ main_checks() {
   #always update portage as early as we can (after making sure python works)
   emerge --update --newuse --oneshot --changed-deps --newrepo portage || safe_exit
 
-  #upgrade glibc first if we are using binpkgs
   removeme14=$(portageq match / '<virtual/libcrypt-2')
   if [ -n "${removeme14}" ]; then
     printf "Removing old libcrypt-1 virtual to ease upgrade to libcrypt-2\n"
     emerge -C "<virtual/libcrypt-2"
   fi
+
+  #upgrade key packages first if we are using binpkgs
   portage_features="$(portageq envvar FEATURES)"
   if [ "${portage_features}" != "${portage_features/getbinpkg//}" ]; then
     #learned something new, if a package updates before glibc and uses the newer glibc, the chance of breakage is
     #*much* higher than if glibc is updated first.  so let's just update glibc first.
-    emerge --update --newuse --oneshot --changed-deps --newrepo glibc || safe_exit
+    emerge --update --newuse --oneshot --changed-deps --newrepo sys-libs/glibc || safe_exit
     # check if libcrypt is missing
     if [ -z "$(portageq best_version / '>=virtual/libcrypt-2')" ]; then
       emerge --update --newuse --oneshot --changed-deps --newrepo '>=virtual/libcrypt-2'
     fi
+    #then we should make sure gcc, binutils, and friends are up to date
+    emerge --update --newuse --oneshot --changed-deps --newrepo sys-devel/gcc dev-libs/mpfr dev-libs/mpc dev-libs/gmp sys-devel/binutils sys-libs/binutils-libs
+    #then to force the new version to be used, remove the old ones
+    emerge --depclean sys-devel/gcc dev-libs/mpfr dev-libs/mpc dev-libs/gmp sys-devel/binutils sys-libs/binutils-libs
   fi
 
   #modified from news item "Python ABIFLAGS rebuild needed"
@@ -550,6 +555,11 @@ main_checks() {
     emerge --deselect sys-fs/eudev
   fi
   #removeme14 used above before glibc install
+  removeme15=$(portageq match / 'dev-python/prompt-toolkit')
+  if [ -n "${removeme15}" ]; then
+    printf "Removing prompt-toolkit, replaced by prompt_toolkit\n"
+    emerge -C dev-python/prompt-toolkit
+  fi
 
   #before main upgrades, let's set a good java-vm
   set_java
@@ -558,15 +568,28 @@ main_checks() {
 
 main_upgrades() {
   emerge --buildpkg @changed-deps
-  emerge --deep --update --newuse -kb --changed-deps --newrepo @world
+  if ! emerge --deep --update --newuse -kb --changed-deps --newrepo @system; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @system
+  fi
+  if ! emerge --deep --update --newuse -kb --changed-deps --newrepo @profile; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @profile
+  fi
+  if ! emerge --deep --update --newuse -kb --changed-deps --newrepo @world; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @world
+  fi
   set_java #might fail, run it a few times
   set_ruby
 
   perl-cleaner --modules -- --buildpkg=y || safe_exit
 
-  emerge --deep --update --newuse -kb --changed-deps --newrepo @world || safe_exit
+  if ! emerge --deep --update --newuse -kb --changed-deps --newrepo @world; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @world || safe_exit
+  fi
   set_java #might fail, run it a few times
   set_ruby
+  if [  -x "$(command -v haskell-updater 2>&1)" ]; then
+    haskell-updater
+  fi
 
   #if we are in catalyst, update the extra binpkgs
   if [ -n "${clst_target}" ]; then
@@ -594,7 +617,9 @@ main_upgrades() {
   fi
   FEATURES="-getbinpkg" smart-live-rebuild 2>&1 || safe_exit
   revdep-rebuild -i -v -- --usepkg=n --buildpkg=y || safe_exit
-  emerge --deep --update --newuse -kb --changed-deps --newrepo @world || emerge --deep --update --newuse -kb --newrepo @world || safe_exit
+  if ! emerge --deep --update --newuse -kb --changed-deps --newrepo @world; then
+    emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @world || safe_exit
+  fi
 }
 
 mount_boot() {

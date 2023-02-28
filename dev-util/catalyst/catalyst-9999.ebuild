@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ ${PV} == *9999* ]]; then
 	SRC_ECLASS="git-r3"
@@ -12,7 +12,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sh ~sparc ~x86"
 fi
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 
 inherit distutils-r1 ${SRC_ECLASS}
 
@@ -34,8 +34,7 @@ RDEPEND="
 	app-arch/lbzip2
 	app-crypt/shash
 	sys-fs/dosfstools
-	!kernel_FreeBSD? ( || ( app-arch/tar[xattr] app-arch/libarchive[xattr] ) )
-	kernel_FreeBSD? ( app-arch/libarchive[xattr] )
+	|| ( app-arch/tar[xattr] app-arch/libarchive[xattr] )
 	amd64? ( >=sys-boot/syslinux-3.72 )
 	x86? ( >=sys-boot/syslinux-3.72 )
 	ccache? ( dev-util/ccache )

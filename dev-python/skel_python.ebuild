@@ -1,11 +1,11 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-#https://projects.gentoo.org/python/guide/distutils.html#pep-517-build-systems
+# https://projects.gentoo.org/python/guide/distutils.html#pep-517-build-systems
 DISTUTILS_USE_PEP517=poetry
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 
 inherit distutils-r1
 

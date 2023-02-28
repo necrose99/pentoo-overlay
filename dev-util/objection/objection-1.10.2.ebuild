@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit distutils-r1
 
@@ -20,7 +20,7 @@ IUSE="patchapk"
 
 RDEPEND=">=dev-util/frida-tools-7.0.0[${PYTHON_USEDEP}]
 	dev-python/frida-python[${PYTHON_USEDEP}]
-	>=dev-python/prompt_toolkit-3.0.3[${PYTHON_USEDEP}] <dev-python/prompt_toolkit-4.0.0[${PYTHON_USEDEP}]
+	>=dev-python/prompt-toolkit-3.0.3[${PYTHON_USEDEP}] <dev-python/prompt-toolkit-4.0.0[${PYTHON_USEDEP}]
 	dev-python/click[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
 	dev-python/delegator[${PYTHON_USEDEP}]

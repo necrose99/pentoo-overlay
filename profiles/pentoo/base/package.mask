@@ -21,23 +21,23 @@ net-wireless/madwifi-ng-tools
 <net-analyzer/wireshark-2.6.3
 
 #force qt update
-<dev-qt/qtprintsupport-5.15.5
-<dev-qt/qtxmlpatterns-5.15.5
-<dev-qt/qtbluetooth-5.15.5
-<dev-qt/qtnetwork-5.15.5
-<dev-qt/qtwidgets-5.15.5
-<dev-qt/qtcharts-5.15.5
-<dev-qt/qtopengl-5.15.5
-<dev-qt/qtcore-5.15.5
-<dev-qt/qtdbus-5.15.5
-<dev-qt/qtgui-5.15.5
-<dev-qt/qtsvg-5.15.5
-<dev-qt/qtwebchannel-5.15.5
-<dev-qt/qtwebsockets-5.15.5
-<dev-qt/qtlocation-5.15.5
-<dev-qt/qtspeech-5.15.5
-<dev-python/pyside2-5.15.5
-<dev-python/shiboken2-5.15.5
+<dev-qt/qtprintsupport-5.15.7
+<dev-qt/qtxmlpatterns-5.15.7
+<dev-qt/qtbluetooth-5.15.7
+<dev-qt/qtnetwork-5.15.7
+<dev-qt/qtwidgets-5.15.7
+<dev-qt/qtcharts-5.15.7
+<dev-qt/qtopengl-5.15.7
+<dev-qt/qtcore-5.15.7
+<dev-qt/qtdbus-5.15.7
+<dev-qt/qtgui-5.15.7
+<dev-qt/qtsvg-5.15.7
+<dev-qt/qtwebchannel-5.15.7
+<dev-qt/qtwebsockets-5.15.7
+<dev-qt/qtlocation-5.15.7
+<dev-qt/qtspeech-5.15.7
+<dev-python/pyside2-5.15.7
+<dev-python/shiboken2-5.15.7
 
 #kill old ruby
 dev-lang/ruby:2.1
@@ -52,8 +52,8 @@ dev-lang/ruby:2.5
 dev-ruby/activesupport:6.1
 
 #disable sudo
-#https://github.com/rubygems/rubygems/issues/4031
->dev-ruby/bundler-2.1.4-r1
+# https://github.com/rubygems/rubygems/issues/4031
+>dev-ruby/bundler-2.2.33-r1
 
 #transition from pycrypto to pycryptodome
 dev-python/pycrypto
@@ -68,10 +68,10 @@ x11-libs/wxGTK:2.8
 <sys-apps/attr-2.4.47-r2
 <sys-fs/udev-249.6-r2
 <sys-fs/udev-init-scripts-27
-<dev-lang/perl-5.34
-<sys-devel/gcc-7.3.0
-<sys-devel/llvm-11.1.0
-<sys-devel/clang-11.1.0
+<dev-lang/perl-5.36
+<sys-devel/gcc-12
+<sys-devel/llvm-14
+<sys-devel/clang-14
 <virtual/libcrypt-2
 <media-libs/harfbuzz-3.1.1
 
@@ -115,10 +115,11 @@ sci-libs/mkl
 #help portage know that this old stuff has to go
 <dev-libs/openssl-1.1.1
 
-#help upgrade to gnuradio 3.8.1.0
+#help upgrade to gnuradio 3.10
 dev-python/cheetah
 <dev-python/numpy-1.17
-<net-wireless/gnuradio-3.8.1.0
+<net-wireless/gnuradio-3.10
+<net-wireless/gr-osmosdr-0.2.3_p20210128-r1
 
 #no wpe patches yet
 >net-dialup/freeradius-3.2.0
@@ -152,10 +153,25 @@ dev-lang/lua:0
 ~media-libs/codec2-1.0.1
 
 #okay so this still doesn't work and seems to be riddled with Internal Compiler Errors
-=sys-devel/gcc-arm-none-eabi-11.2_p202202-r2
+>=sys-devel/gcc-arm-none-eabi-11.2_p202202-r2
 
 #https://github.com/intoolswetrust/jd-cli/issues/81
 >dev-java/jcommander-1.32
 
 #stop constant downgrades
 <dev-cpp/abseil-cpp-20211102.0
+
+# Sam James <sam@gentoo.org> (2022-10-04)
+# (added affected pentoo-sources -Zero)
+# Regression for some Intel LCDs which may cause physical damage
+# Please upgrade to 5.19.13 if affected!
+# https://lore.kernel.org/all/YzwooNdMECzuI5+h@intel.com/
+# https://lore.kernel.org/lkml/1664893073238194@kroah.com/T/
+=sys-kernel/pentoo-sources-5.19.12
+
+#mask old kismet to ensure old version isn't selected
+<net-wireless/kismet-2022.08.1-r1
+
+#known udev bug, upgrade immediately
+#https://github.com/systemd/systemd/issues/22801
+<sys-apps/systemd-utils-252.5

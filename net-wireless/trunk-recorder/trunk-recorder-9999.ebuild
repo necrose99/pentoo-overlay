@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="Records calls from a Trunked Radio System (P25 & SmartNet)"
 HOMEPAGE="https://github.com/robotastic/trunk-recorder"
@@ -21,20 +21,32 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-DEPEND="net-wireless/gr-osmosdr:=
-	net-wireless/gnuradio:=[uhd]
-	net-wireless/uhd:=
-	!net-wireless/op25
-	net-misc/curl:=
+DEPEND="
+	dev-libs/libfmt:=
 	dev-libs/log4cpp:=
 	dev-libs/openssl:0=
-	dev-libs/boost"
+	dev-libs/spdlog:=
+	dev-libs/boost:=
+	net-misc/curl
+	net-wireless/gnuradio:=[uhd]
+	net-wireless/gr-osmosdr:=
+	net-wireless/uhd:=
+	!net-wireless/op25
+	sci-libs/volk:=
+	"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-src_configure() {
-	local mycmakeargs=(
-		-DBUILD_SHARED_LIBS=OFF
-	)
-	cmake_src_configure
+#-D_GLIBCXX_ASSERTIONS reveals the issue but the code is broken and this only hides it
+#https://github.com/robotastic/trunk-recorder/issues/780
+#https://github.com/robotastic/trunk-recorder/issues/779
+#https://github.com/gnuradio/gnuradio/issues/6547
+#append-cxxflags -U_GLIBCXX_ASSERTIONS
+
+src_install() {
+	cmake_src_install
+	# https://github.com/robotastic/trunk-recorder/issues/722
+	rm "${ED}/usr/include/${PN}/git.h" || die
+	cp git.h "${ED}/usr/include/${PN}/git.h" || die
+	cp "${BUILD_DIR}/libgit.so" "${ED}/usr/lib/trunk-recorder/libgit.so" || die
 }

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit python-any-r1
 
 MY_P="wireless-regdb-${PV:0:4}.${PV:4:2}.${PV:6:2}"
@@ -17,7 +17,16 @@ LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm arm64 ~ia64 ~loong ~mips ppc ppc64 ~riscv sparc x86"
 
-BDEPEND="$(python_gen_any_dep 'dev-python/m2crypto[${PYTHON_USEDEP}]')"
+BDEPEND="${PYTHON_DEPS}
+	$(python_gen_any_dep 'dev-python/m2crypto[${PYTHON_USEDEP}]')"
+
+python_check_deps() {
+	python_has_version "dev-python/m2crypto[${PYTHON_USEDEP}]"
+}
+
+pkg_setup() {
+	python-any-r1_pkg_setup
+}
 
 src_prepare() {
 	eapply "${FILESDIR}"/no-no-ir.patch

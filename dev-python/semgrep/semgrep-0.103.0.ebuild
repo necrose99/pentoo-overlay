@@ -4,7 +4,7 @@
 EAPI=7
 
 DISTUTILS_USE_SETUPTOOLS=rdepend
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 
 inherit distutils-r1
 
@@ -32,7 +32,9 @@ RDEPEND="
 	>=dev-python/defusedxml-0.7.1[${PYTHON_USEDEP}]
 	>=dev-python/urllib3-1.26[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.2[${PYTHON_USEDEP}]
-	>=dev-python/python-lsp-jsonrpc-1.0.0[${PYTHON_USEDEP}]"
+	>=dev-python/python-lsp-jsonrpc-1.0.0[${PYTHON_USEDEP}]
+	dev-util/semgrep-core-bin"
+DEPEND="${RDEPEND}"
 
 src_prepare(){
 	rm -r tests

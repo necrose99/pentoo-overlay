@@ -7,7 +7,7 @@ USE_RUBY="ruby27 ruby30 ruby31"
 
 inherit ruby-fakegem
 
-DESCRIPTION="collection of next-generation Ruby libraries"
+DESCRIPTION="String inflections for dry-rb"
 HOMEPAGE="https://dry-rb.org/"
 
 KEYWORDS="amd64 ~arm64 x86"

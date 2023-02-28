@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
 
 DESCRIPTION="A simple and pragmatic library which accesses the Neo4j graph database"
@@ -23,7 +23,7 @@ RDEPEND="${PYTHON_DEPS}
 	dev-python/click[${PYTHON_USEDEP}]
 	dev-python/neobolt[${PYTHON_USEDEP}]
 	dev-python/neotime[${PYTHON_USEDEP}]
-	dev-python/prompt_toolkit[${PYTHON_USEDEP}]
+	dev-python/prompt-toolkit[${PYTHON_USEDEP}]
 	dev-python/pygments[${PYTHON_USEDEP}]
 	dev-python/pytz[${PYTHON_USEDEP}]
 	dev-python/urllib3[${PYTHON_USEDEP}]"

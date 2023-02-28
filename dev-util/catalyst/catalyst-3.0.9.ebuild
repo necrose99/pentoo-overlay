@@ -12,7 +12,7 @@ else
 	KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~mips ppc ppc64 ~riscv s390 sparc x86"
 fi
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_USE_SETUPTOOLS=no
 
 inherit distutils-r1 ${SRC_ECLASS}
@@ -34,8 +34,7 @@ RDEPEND="
 	app-arch/lbzip2
 	app-crypt/shash
 	sys-fs/dosfstools
-	!kernel_FreeBSD? ( || ( app-arch/tar[xattr] app-arch/libarchive[xattr] ) )
-	kernel_FreeBSD? ( app-arch/libarchive[xattr] )
+	|| ( app-arch/tar[xattr] app-arch/libarchive[xattr] )
 	amd64? ( >=sys-boot/syslinux-3.72 )
 	x86? ( >=sys-boot/syslinux-3.72 )
 	ccache? ( dev-util/ccache )
