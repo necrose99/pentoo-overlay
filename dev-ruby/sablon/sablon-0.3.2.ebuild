@@ -3,7 +3,7 @@
 
 EAPI=7
 
-USE_RUBY="ruby27 ruby30 ruby31"
+USE_RUBY="ruby31 ruby32"
 RUBY_FAKEGEM_BINDIR="exe"
 
 inherit ruby-fakegem
@@ -14,7 +14,6 @@ HOMEPAGE="https://github.com/senny/sablon"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 ruby_add_rdepend "
 	>=dev-ruby/nokogiri-1.6.0

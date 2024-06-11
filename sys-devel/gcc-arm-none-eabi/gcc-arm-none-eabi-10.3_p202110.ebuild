@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 #https://bugs.launchpad.net/gcc-arm-embedded/+bug/1949004
 #major/update
@@ -19,6 +19,7 @@ HOMEPAGE="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm"
 SRC_URI="amd64? ( https://developer.arm.com/-/media/Files/downloads/gnu-rm/${MY_PV}/gcc-arm-none-eabi-${MY_PV}-x86_64-linux.tar.bz2 )
 	arm64? ( https://developer.arm.com/-/media/Files/downloads/gnu-rm/${MY_PV}/gcc-arm-none-eabi-${MY_PV}-aarch64-linux.tar.bz2 )"
 
+S="${WORKDIR}/${PN}-${MY_PV}"
 LICENSE="BSD GPL-2 LGPL-2 LGPL-3 MIT NEWLIB ZLIB"
 SLOT="0"
 KEYWORDS="amd64"
@@ -26,11 +27,8 @@ IUSE="python2"
 RESTRICT="strip"
 QA_PREBUILT="*"
 
-DEPEND=""
 RDEPEND="sys-libs/ncurses-compat
 		python2? ( dev-lang/python:2.7 )"
-
-S="${WORKDIR}/${PN}-${MY_PV}"
 
 src_install() {
 	dodir /opt/${PN}

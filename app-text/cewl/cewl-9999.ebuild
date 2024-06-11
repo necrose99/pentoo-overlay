@@ -3,7 +3,7 @@
 
 EAPI=7
 
-USE_RUBY="ruby27 ruby30 ruby31"
+USE_RUBY="ruby31 ruby32"
 inherit ruby-ng
 
 DESCRIPTION="A custom word list generator"
@@ -12,6 +12,7 @@ if [ "${PV}" == "9999" ]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/digininja/CeWL.git"
 	EGIT_CHECKOUT_DIR="${WORKDIR}/all/CeWL-${PV}"
+	EGIT_BRANCH="max_length"
 else
 	SRC_URI="https://github.com/digininja/CeWL/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 x86"
@@ -22,13 +23,15 @@ SLOT="0"
 IUSE=""
 MY_P="CeWL-${PV}"
 
-ruby_add_bdepend "dev-ruby/bundler:2"
+ruby_add_bdepend "dev-ruby/bundler"
 
 ruby_add_rdepend "dev-ruby/nokogiri
 		dev-ruby/spider
 		dev-ruby/mini_exiftool
 		dev-ruby/rubyzip:*
-		>=dev-ruby/mime-types-3.3.1:*"
+		>=dev-ruby/mime-types-3.3.1:*
+		dev-ruby/rexml
+		dev-ruby/rubyzip"
 
 all_ruby_prepare() {
 	sed -i "s|require './cewl_lib'|require 'cewl_lib'|g" ${MY_P}/cewl.rb || die

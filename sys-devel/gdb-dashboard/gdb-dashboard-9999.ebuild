@@ -1,11 +1,11 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 
-inherit eutils python-single-r1
+inherit python-single-r1 wrapper
 
 DESCRIPTION="Modular visual interface for GDB in Python"
 HOMEPAGE="https://github.com/cyrus-and/gdb-dashboard"
@@ -23,7 +23,8 @@ SLOT="0"
 
 RDEPEND="
 	$(python_gen_cond_dep 'dev-python/pygments[${PYTHON_USEDEP}]')
-	sys-devel/gdb[python]"
+	dev-debug/gdb[python]
+	${PYTHON_DEPS}"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 pkg_setup() {

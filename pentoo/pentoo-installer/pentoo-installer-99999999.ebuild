@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -14,14 +14,12 @@ if [[ "${PV}" == "99999999" ]] ; then
 	EGIT_REPO_URI="https://github.com/pentoo/${PN}.git"
 else
 	KEYWORDS="~amd64 ~x86"
-	GIT_COMMIT="b6602a395d8780a0414d32c5460b4ebe56eafa8b"
+	GIT_COMMIT="afc1a21e04d61c59fbf9a7e193c140ab5badf263"
 	SRC_URI="https://github.com/pentoo/pentoo-installer/archive/${GIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/${PN}-${GIT_COMMIT}"
 fi
 
-IUSE=""
-
-PDEPEND="
+RDEPEND="
 	app-crypt/pinentry[gtk,ncurses]
 	app-misc/jq
 	dev-util/dialog
@@ -42,6 +40,7 @@ PDEPEND="
 	sys-fs/reiserfsprogs
 	sys-fs/squashfs-tools
 	sys-fs/xfsprogs
+	sys-libs/timezone-data
 	x11-misc/wmctrl
 	net-misc/rsync
 	"

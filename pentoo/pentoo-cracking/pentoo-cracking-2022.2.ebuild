@@ -4,12 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Pentoo cracking meta ebuild"
-HOMEPAGE="http://www.pentoo.ch"
+HOMEPAGE="https://www.pentoo.org"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="opencl +dict livecd-stage1 pentoo-extra pentoo-full"
 KEYWORDS="~amd64 ~arm ~x86"
+IUSE="opencl +dict livecd-stage1 pentoo-extra pentoo-full"
 
 PDEPEND="
 	app-crypt/johntheripper-jumbo

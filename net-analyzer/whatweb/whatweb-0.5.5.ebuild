@@ -1,15 +1,16 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-USE_RUBY="ruby27 ruby30 ruby31"
+USE_RUBY="ruby31 ruby32"
 inherit ruby-single
 
 DESCRIPTION="Next generation web scanner, identifies what software websites are running"
 HOMEPAGE="http://www.morningstarsecurity.com/research/whatweb"
 SRC_URI="https://github.com/urbanadventurer/WhatWeb/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
+S="${WORKDIR}/WhatWeb-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 ~arm64 x86"
@@ -25,8 +26,6 @@ RDEPEND="${DEPEND}
 #future rdepend:
 #dns: em-resolv-replace
 #mongodb: bison bson_ext mongo rchardet
-
-S="${WORKDIR}/WhatWeb-${PV}"
 
 src_prepare() {
 	# fix installation

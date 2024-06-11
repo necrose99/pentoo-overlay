@@ -2,12 +2,10 @@
 
 net-misc/sippts
 net-vpn/udp2raw-tunnel
-net-misc/wireshark-sap-plugin
 
 #Gentoo
-=net-libs/libsearpc-3.2*
-=net-misc/seafile-8*
-=net-misc/seafile-client-8*
+=net-misc/seafile-9*
+=net-misc/seafile-client-9*
 
 ~net-misc/nemesis-1.4
 ~net-misc/raccess-0.7
@@ -17,8 +15,6 @@ net-misc/wireshark-sap-plugin
 net-misc/ieee-oui
 ~net-misc/vidalia-0.3.1
 ~net-misc/portspoof-1.3
-
-net-misc/wireshark-patoolkit
 
 #below here likely needs cleanup
 net-misc/6tunnel
@@ -105,12 +101,10 @@ net-misc/vinagre
 net-misc/vino
 net-misc/vmpsd
 net-misc/vncrec
-net-misc/wlan2eth
 net-misc/wxdfast
 net-misc/xsupplicant
 net-misc/karma
 net-misc/sipp
-net-misc/voipong
 
 ~net-libs/libsearpc-3.1
 

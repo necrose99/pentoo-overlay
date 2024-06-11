@@ -1,30 +1,30 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-inherit eutils java-pkg-2 desktop systemd
+EAPI=8
+inherit java-pkg-2 desktop systemd
 
 #https://sourceforge.net/projects/davmail/files/davmail/
 MY_PN="davmail"
 
 DESCRIPTION="POP/IMAP/SMTP/Caldav/Carddav/LDAP Exchange Gateway"
 HOMEPAGE="http://davmail.sourceforge.net/"
-SRC_URI="mirror://sourceforge/${MY_PN}/${MY_PN}-$(ver_cut 1-3)-$(ver_cut 4).zip"
+SRC_URI="https://downloads.sourceforge.net/${MY_PN}/${MY_PN}-$(ver_cut 1-3)-$(ver_cut 4).zip"
 
+S="${WORKDIR}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE="server"
 
+BDEPEND="app-arch/unzip"
 DEPEND="|| ( >=virtual/jre-1.6:*
 	>=virtual/jdk-1.6:*
-	)
-	!net-mail/davmail"
+	)"
 RDEPEND="${DEPEND}
 	server? ( acct-user/davmail
 		acct-group/davmail
 	)"
-S="${WORKDIR}"
 
 java-pkg-2_src_compile() {
 	einfo ""

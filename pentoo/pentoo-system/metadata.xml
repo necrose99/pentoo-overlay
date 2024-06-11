@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>sidhayn@gmail.com</email>
+		<name>Zero_Chaos</name>
+	</maintainer>
+	<use>
+		<flag name="2fa">Include support for yubikey</flag>
+		<flag name="qemu">install virt-manager and usermode-utilities</flag>
+		<flag name="windows-compat">Install wine</flag>
+	</use>
+</pkgmetadata>

@@ -1,12 +1,12 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 #never ever ever have more than one ruby in here
 #TODO: use ruby-single instead?
-USE_RUBY="ruby27"
-inherit eutils ruby-ng multiprocessing
+USE_RUBY="ruby31"
+inherit ruby-ng multiprocessing
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/rapid7/metasploit-framework.git"
@@ -30,7 +30,7 @@ IUSE="development +java nexpose oracle +pcap test"
 
 #multiple known bugs with tests reported upstream and ignored
 #http://dev.metasploit.com/redmine/issues/8418 - worked around (fix user creation when possible)
-RESTRICT="test"
+RESTRICT="strip test"
 
 RUBY_COMMON_DEPEND="
 	dev-ruby/bundler:2
@@ -43,6 +43,7 @@ COMMON_DEPEND="
 	dev-db/postgresql:*[server]
 	dev-db/sqlite
 	|| ( app-crypt/johntheripper-jumbo >=app-crypt/johntheripper-1.7.9-r1[-minimal(-)] )
+	dev-libs/libffi
 	dev-libs/libxml2
 	dev-libs/libxslt
 	dev-libs/openssl
@@ -52,8 +53,6 @@ COMMON_DEPEND="
 RDEPEND+=" ${COMMON_DEPEND}
 	>=app-eselect/eselect-metasploit-0.16"
 DEPEND+=" ${COMMON_DEPEND}"
-
-RESTRICT="strip"
 
 QA_PREBUILT="
 	usr/lib*/${PN}${SLOT}/data/templates/template_x86_linux.bin
@@ -174,7 +173,9 @@ fix_gemspec() {
 }
 
 pkg_setup() {
+	ruby-ng_pkg_setup
 	if use test; then
+		pushd "${T}" > /dev/null || die
 		su postgres -c "dropdb msf_test_database" #this is intentionally allowed to fail
 		su postgres -c "createuser msf_test_user -d -S -R"
 		if [ $? -ne 0 ]; then
@@ -182,8 +183,8 @@ pkg_setup() {
 			su postgres -c "createuser msf_test_user -d -S -R" || die
 		fi
 		su postgres -c "createdb --owner=msf_test_user msf_test_database" || die
+		popd > /dev/null || die
 	fi
-	ruby-ng_pkg_setup
 }
 
 src_unpack() {
@@ -195,10 +196,8 @@ src_unpack() {
 	fix_gemspec
 	pushd "${S}/all" > /dev/null || die
 	${USE_RUBY} -S bundle-audit --update || true
-	#GEM_HOME="${T}" MSF_ROOT="." ${USE_RUBY} -S bundle outdated --local || true
-	#GEM_HOME="${T}" MSF_ROOT="." ${USE_RUBY} -S bundle update || true
-	#GEM_HOME="${T}" MSF_ROOT="." ${USE_RUBY} -S bundle install ${makeopts_jobs} --deployment || die
-	GEM_HOME="${T}" MSF_ROOT="." ${USE_RUBY} -S bundle install ${makeopts_jobs} --path vendor || die
+	GEM_HOME="${T}" MSF_ROOT="." ${USE_RUBY} -S bundle config set --local path 'vendor'
+	GEM_HOME="${T}" MSF_ROOT="." ${USE_RUBY} -S bundle install ${makeopts_jobs} || die
 	popd > /dev/null || die
 }
 
@@ -271,7 +270,8 @@ each_ruby_install() {
 	rm -r test || die
 	#rm Gemfile.lock || die
 
-	#I'm 99% sure that this will only work for as long as we only support one ruby version.  Creativity will be needed if we wish to support multiple.
+	#I'm 99% sure that this will only work for as long as we only support one ruby version.
+	# Creativity will be needed if we wish to support multiple.
 	# should be as simple as copying everything into the target...
 	dodir /usr/lib/${PN}${SLOT}
 	cp -R * "${ED}"/usr/lib/${PN}${SLOT} || die "Copy files failed"

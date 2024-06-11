@@ -21,10 +21,13 @@ dev-libs/boehm-gc threads
 #sys-apps/fwupd
 dev-libs/libjcat gpg pkcs7
 
-#required by sys-devel/gef
-dev-libs/keystone python
-
 dev-libs/libdbusmenu gtk3
 
 #these seem safe in my testing
 dev-libs/pocl cl20 hardening lto
+
+#required by librnp which is required by thunderbird
+dev-libs/sexp static-libs
+
+#(dependency required by "dev-debug/systemtap-5.0-r1::gentoo" [ebuild])
+dev-libs/elfutils debuginfod

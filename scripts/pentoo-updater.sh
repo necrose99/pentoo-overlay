@@ -24,44 +24,47 @@ export WE_FAILED=0
 . /etc/profile
 env-update
 
-kernel_symlink_fixer() {
-  ##adjust /usr/src/linux link if we are pretty sure we won't screw up the system
-  KV=$(uname -r)
-  if [ -d "/usr/src/linux-${KV}" ] && [ "$(readlink -e /usr/src/linux)" != "/usr/src/linux-${KV}" ]; then
-    if /usr/bin/qfile "/usr/src/linux-${KV}" > /dev/null 2>&1; then
-      if [ -L /usr/src/linux ]; then
-        unlink /usr/src/linux
-      fi
-      ln -s "/usr/src/linux-${KV}" /usr/src/linux
-      if [ -L "/lib/modules/${KV}/build" ]; then
-        unlink "/lib/modules/${KV}/build"
-      fi
-      ln -s "/usr/src/linux-${KV}" "/lib/modules/${KV}/build"
-      if [ -L "/lib/modules/${KV}/source" ]; then
-        unlink "/lib/modules/${KV}/source"
-      fi
-      ln -s "/usr/src/linux-${KV}" "/lib/modules/${KV}/source"
-    else
-      printf "Kernel symlink cannot be correctly set, this is likely to cause failures.\n"
-      return 1
-    fi
-  fi
-  return 0
-}
+#kernel_symlink_fixer() {
+#  ##adjust /usr/src/linux link if we are pretty sure we won't screw up the system
+#  KV=$(uname -r)
+#  if [ -d "/usr/src/linux-${KV}" ] && [ "$(readlink -e /usr/src/linux)" != "/usr/src/linux-${KV}" ]; then
+#    if /usr/bin/qfile "/usr/src/linux-${KV}" > /dev/null 2>&1; then
+#      if [ -L /usr/src/linux ]; then
+#        unlink /usr/src/linux
+#      fi
+#      ln -s "/usr/src/linux-${KV}" /usr/src/linux
+#      if [ -L "/lib/modules/${KV}/build" ]; then
+#        unlink "/lib/modules/${KV}/build"
+#      fi
+#      ln -s "/usr/src/linux-${KV}" "/lib/modules/${KV}/build"
+#      if [ -L "/lib/modules/${KV}/source" ]; then
+#        unlink "/lib/modules/${KV}/source"
+#      fi
+#      ln -s "/usr/src/linux-${KV}" "/lib/modules/${KV}/source"
+#    else
+#      printf "Kernel symlink cannot be correctly set, this is likely to cause failures.\n"
+#      return 1
+#    fi
+#  fi
+#  return 0
+#}
 
 setup_env() {
   #colorize the updates even if colors end up in the logs
-  export EMERGE_DEFAULT_OPTS="$(portageq envvar EMERGE_DEFAULT_OPTS) --color=y"
+  EMERGE_DEFAULT_OPTS="$(portageq envvar EMERGE_DEFAULT_OPTS) --color=y"
+  export EMERGE_DEFAULT_OPTS
 
   if [ -n "${clst_subarch}" ]; then
     if [ "${clst_subarch}" = "amd64" ]; then
       ARCH="amd64"
       ARCHY="x86_64"
       PROFILE_ARCH="amd64_r1"
+      KERN_ARCH="x86"
     elif [ "${clst_subarch}" = "pentium-m" ]; then
       ARCH="x86"
       ARCHY="x86"
       PROFILE_ARCH="x86"
+      KERN_ARCH="x86"
     fi
   else
     arch=$(uname -m)
@@ -69,14 +72,16 @@ setup_env() {
       ARCH="x86"
       ARCHY="x86"
       PROFILE_ARCH="x86"
+      KERN_ARCH="x86"
     elif [ "${arch}" = "x86_64" ]; then
       ARCH="amd64"
       ARCHY="x86_64"
       PROFILE_ARCH="amd64_r1"
+      KERN_ARCH="x86"
     fi
   fi
   if [ -n "${ARCH}" ]; then
-    export ARCH ARCHY PROFILE_ARCH
+    export ARCH ARCHY PROFILE_ARCH KERN_ARCH
   else
     printf "Failed to detect arch, some things will be broken\n"
   fi
@@ -108,6 +113,14 @@ set_java() {
 }
 
 set_ruby() {
+  if portageq has_version / dev-lang/ruby:3.1; then
+    eselect ruby set ruby31
+    return 0
+  fi
+  if portageq has_version / dev-lang/ruby:3.0; then
+    eselect ruby set ruby30
+    return 0
+  fi
   if portageq has_version / dev-lang/ruby:2.7; then
     eselect ruby set ruby27
     return 0
@@ -213,8 +226,12 @@ rebuild_lib32() {
   fi
   if [ -n "${REBUILD_DIRS}" ]; then
     if [ -n "${clst_target}" ]; then
+      # we want splitting, disabling check
+      # shellcheck disable=2086
       emerge -1v --deep --usepkg=n --buildpkg=y ${REBUILD_DIRS}
     else
+      # we want splitting, disabling check
+      # shellcheck disable=2086
       emerge -1v --deep ${REBUILD_DIRS}
     fi
     return $?
@@ -226,22 +243,17 @@ rebuild_lib32() {
 update_kernel() {
   #bigger updates can fail, so make sure at least all this stuff is up to date
   emerge --update virtual/linux-sources sys-kernel/genkernel sys-kernel/linux-firmware sys-firmware/intel-microcode --oneshot || safe_exit
-  bestkern="$(qlist $(portageq best_version / pentoo-sources 2> /dev/null) | grep 'distro/Kconfig' | awk -F'/' '{print $4}' | cut -d'-' -f 2-)"
+  bestkern="$(qlist "$(portageq best_version / pentoo-sources 2> /dev/null)" | grep 'distro/Kconfig' | awk -F'/' '{print $4}' | cut -d'-' -f 2-)"
   bestkern_pv="$(portageq best_version / pentoo-sources | cut -d'-' -f 4-)"
   if [ -z "${bestkern}" ]; then
     printf "Failed to find pentoo-sources installed, is this a Pentoo system?\n"
-  #  bestkern="$(qlist $(portageq best_version / gentoo-sources 2> /dev/null) | grep 'distro/Kconfig' | awk -F'/' '{print $4}' | cut -d'-' -f 2-)"
-  #  bestkern_pv="$(portageq best_version / gentoo-sources | cut -d'-' -f 4-)"
-  #  if [ -z "${bestkern}" ]; then
-  #    printf "Failed to find gentoo-sources as well, giving up.\n"
-      return 1
-  #  fi
+    return 1
   fi
 
   #first we check for a config
   local_config="/usr/share/pentoo-sources/config-${ARCH}-${bestkern_pv}"
   if [ ! -r "${local_config}" ]; then
-    printf "Unable to find a viable config for ${bestkern}, skipping update.\n"
+    printf "Unable to find a viable config for %s, skipping update.\n" "${bestkern}"
     return 1
   else
     #okay, we have a config, now we mangle it for x86 as appropriate
@@ -250,11 +262,7 @@ update_kernel() {
       sed -i '/^CONFIG_HIGHMEM4G/s/CONFIG_HIGHMEM4G/# CONFIG_HIGHMEM4G/' "${local_config}"
       sed -i '/^# *CONFIG_HIGHMEM64G/s/^# *//' "${local_config}"
       sed -i '/^CONFIG_HIGHMEM64G/s/ .*/=y/' "${local_config}"
-      oldpwd=$(pwd)
-      cd "/usr/src/linux-${bestkern}"
-      make olddefconfig
-      cd "${oldpwd}"
-      unset oldpwd
+      make -C "/usr/src/linux-${bestkern}" olddefconfig
       printf "PAE enabled.\n"
     fi
   fi
@@ -264,27 +272,52 @@ update_kernel() {
     ln -s "linux-${bestkern}" /usr/src/linux
   fi
 
-  currkern="$(uname -r)"
-  if [ "${currkern}" != "${bestkern}" ]; then
-    printf "Currently running kernel ${currkern} is out of date.\n"
-    if [ -x "/usr/src/linux-${bestkern}/vmlinux" ] && [ -r "/lib/modules/${bestkern}/modules.dep" ]; then
-      if [ -r /etc/kernels/kernel-config-${bestkern} ]; then
-        printf "Kernel ${bestkern} appears ready to go, please reboot when convenient.\n"
-        return 0
-      else
-        printf "Kernel ${bestkern} doesn't appear ready for use, rebuilding...\n"
-      fi
-    else
-      printf "Updated kernel ${bestkern} available, building...\n"
-    fi
-  elif [ -r /etc/kernels/kernel-config-${bestkern} ]; then
-    printf "No updated kernel or config found. No kernel changes needed.\n"
-    return 0
-  elif [ -r /etc/kernels/kernel-config-${ARCHY}-${bestkern} ]; then
-    printf "No updated kernel or config found. No kernel changes needed.\n"
-    return 0
+  # check if kernel needs a rebuild, adapted badly from linux-mod-r1.eclass
+  rebuild_required="false"
+  kvtmp="$(mktemp -d)/linux-mod-r1_gccplugins"
+  mkdir -p -- "${kvtmp}"
+
+  echo "obj-m += test.o" > "${kvtmp}"/Kbuild
+  :> "${kvtmp}"/test.c
+
+  # always fails, but interested in the stderr messages
+  kvoutput=$(
+  cd -- /usr/src/linux && # fwiw skip non-POSIX -C in eclasses
+    LC_ALL=C make V=1 ARCH="${KERN_ARCH}" M="${kvtmp}" 2>&1 >/dev/null
+  )
+
+  if [[ ${kvoutput} == *"error: incompatible gcc/plugin version"* ]]; then
+    rebuild_required="true"
+  fi
+
+  if [ "${rebuild_required}" = "true" ]; then
+    # tbh, this is probably going to say "needs rebuilt" even when it's a new kernel
+    # consider better tests to provide more useful messages
+    printf "Kernel %s needs to be rebuilt, rebuilding...\n" "${bestkern}"
   else
-    printf "Kernel ${bestkern} doesn't appear ready for use, rebuilding...\n"
+    # not honestly sure how often this will hit or do anything now
+    currkern="$(uname -r)"
+    if [ "${currkern}" != "${bestkern}" ]; then
+      printf "Currently running kernel %s is out of date.\n" "${currkern}"
+      if [ -x "/usr/src/linux-${bestkern}/vmlinux" ] && [ -r "/lib/modules/${bestkern}/modules.dep" ]; then
+        if [ -r "/etc/kernels/kernel-config-${bestkern}" ]; then
+          printf "Kernel %s appears ready to go, please reboot when convenient.\n" "${bestkern}"
+          return 0
+        else
+          printf "Kernel %s doesn't appear ready for use, rebuilding...\n" "${bestkern}"
+        fi
+      else
+        printf "Updated kernel %s available, building...\n" "${bestkern}"
+      fi
+    elif [ -r "/etc/kernels/kernel-config-${bestkern}" ]; then
+      printf "No updated kernel or config found. No kernel changes needed.\n"
+      return 0
+    elif [ -r "/etc/kernels/kernel-config-${ARCHY}-${bestkern}" ]; then
+      printf "No updated kernel or config found. No kernel changes needed.\n"
+      return 0
+    else
+      printf "Kernel %s doesn't appear ready for use, rebuilding...\n" "${bestkern}"
+    fi
   fi
 
   #update kernel command line as needed
@@ -299,7 +332,7 @@ update_kernel() {
   fi
 
   #then we set genkernel options as needed
-  genkernelopts="--kernel-config=/usr/share/pentoo-sources/config-${ARCH}-${bestkern_pv} --compress-initramfs-type=zstd --bootloader=grub2 --save-config --kernel-filename=kernel-genkernel-%%ARCH%%-%%KV%% --initramfs-filename=initramfs-genkernel-%%ARCH%%-%%KV%% --systemmap-filename=System.map-genkernel-%%ARCH%%-%%KV%% --kernel-localversion=UNSET --module-rebuild --save-config --no-microcode-initramfs --check-free-disk-space-bootdir=50"
+  genkernelopts="--kernel-config=/usr/share/pentoo-sources/config-${ARCH}-${bestkern_pv} --compress-initramfs-type=zstd --bootloader=grub2 --save-config --kernel-filename=kernel-genkernel-%%ARCH%%-%%KV%% --initramfs-filename=initramfs-genkernel-%%ARCH%%-%%KV%% --systemmap-filename=System.map-genkernel-%%ARCH%%-%%KV%% --kernel-localversion=UNSET --module-rebuild --save-config --no-microcode --no-microcode-initramfs --check-free-disk-space-bootdir=50"
   if grep -q btrfs /etc/fstab || grep -q btrfs /proc/cmdline; then
     genkernelopts="${genkernelopts} --btrfs"
   fi
@@ -315,11 +348,13 @@ update_kernel() {
     genkernelopts="${genkernelopts} --luks"
   fi
   #then we go nuts
+  # we want splitting, disabling check
+  # shellcheck disable=2086
   if genkernel ${genkernelopts} --module-rebuild-cmd="emerge @module-rebuild" all; then
-    printf "Kernel ${bestkern} built successfully, please reboot when convenient.\n"
+    printf "Kernel %s built successfully, please reboot when convenient.\n" "${bestkern}"
     return 0
   else
-    printf "Kernel ${bestkern} failed to build, please see logs above.\n"
+    printf "Kernel %s failed to build, please see logs above.\n" "${bestkern}"
     return 1
   fi
 }
@@ -340,22 +375,52 @@ safe_exit() {
   fi
 }
 
-do_sync() {
-  if [ -f "/usr/portage/metadata/timestamp.chk" ]; then
-    read -r portage_timestamp <  /usr/portage/metadata/timestamp.chk
-  elif [ -f "/var/db/repos/gentoo/metadata/timestamp.chk" ]; then
-    read -r portage_timestamp <  /var/db/repos/gentoo/metadata/timestamp.chk
+pre_sync_fixes() {
+  #sometimes binpkgs are size 0, and that's not okay
+  find "$(portageq envvar PKGDIR)" -size 0 -delete
+  # this bug breaks --sync and EVERYTHING ELSE so it gets fixed first
+  #adjust the portage version to check for once the bug is fixed
+  bug903917="$(portageq match / '<sys-apps/portage-3.0.46')"
+  if [ -n "${bug903917}" ]; then
+    #https://bugs.gentoo.org/903917
+    removed_bad_pkg=0
+    for maybe_bad_pkg in "$(portageq envvar PKGDIR)"/dev-python/jupyter-server/jupyter-server-*.gpkg.tar*; do
+      if [ -f "${maybe_bad_pkg}" ]; then
+        rm -f "${maybe_bad_pkg}"
+        removed_bad_pkg=1
+      fi
+    done
+    if [ "${removed_bad_pkg}" = 1 ]; then
+      printf "Potentially broken binary packages found and removed.\n"
+    fi
   fi
-  portage_date=`date --date="$portage_timestamp" '+%Y%m%d%H%M' -u`
-  minutesDiff=$(( `date '+%Y%m%d%H%M' -u` - $portage_date ))
+}
+
+do_sync() {
+  if [ -f "$(portageq get_repo_path / gentoo)/metadata/timestamp.chk" ]; then
+    read -r portage_timestamp <  "$(portageq get_repo_path / gentoo)/metadata/timestamp.chk"
+  else
+    printf "Unable to fine your gentoo repo, unable to sync.\n"
+    return 1
+  fi
+  portage_date="$(date --date="${portage_timestamp}" '+%Y%m%d%H%M' -u)"
+  minutesDiff=$(( $(date '+%Y%m%d%H%M' -u) - portage_date ))
   if [ $minutesDiff -lt 60 ]
   then
     echo "The last sync was $minutesDiff minutes ago (<1 hour), skipping"
     return
   fi
 
+  if [ -f '/etc/gitconfig' ]; then
+    if ! grep -q '/var/db/repos/pentoo' /etc/gitconfig; then
+      git config --system --add safe.directory /var/db/repos/pentoo
+    fi
+  else
+    git config --system --add safe.directory /var/db/repos/pentoo
+  fi
   # People seem to break these permissions a lot, so just set them.  it takes <3 seconds on my box
-  chown portage:portage -R /var/db/repos/{gentoo,pentoo}
+  chown -R portage:portage "$(portageq get_repo_path / gentoo)"
+  chown -R portage:portage "$(portageq get_repo_path / pentoo)"
   if ! emerge --sync; then
     if [ -e /etc/portage/repos.conf/pentoo.conf ] && grep -q pentoo.asc /etc/portage/repos.conf/pentoo.conf; then
       printf "Pentoo repo key incorrectly defined, fixing..."
@@ -366,28 +431,34 @@ do_sync() {
       else
         printf "OK\n"
         printf "Please re-run pentoo-updater.\n"
+        exit 0
       fi
     else
       printf "emerge --sync failed, aborting update for safety\n"
       exit 1
     fi
   fi
+  if [ -x "$(command -v getuto 2>&1)" ]; then
+    printf 'Updating gentoo gpg keys in /etc/portage/gnupg...\n'
+    getuto
+  fi
 }
 
 main_checks() {
   setup_env
-  if [ -z "${clst_target}" ]; then
-    if kernel_symlink_fixer; then
-      KERNEL_SYMLINK=0
-    else
-      KERNEL_SYMLINK=1
-    fi
-  fi
+  #if [ -z "${clst_target}" ]; then
+  #  if kernel_symlink_fixer; then
+  #    KERNEL_SYMLINK=0
+  #  else
+  #    KERNEL_SYMLINK=1
+  #  fi
+  #fi
   #check profile, manage repo, ensure valid python selected
   check_profile
+  pre_sync_fixes
   if [ -n "${clst_target}" ]; then #we are in catalyst
     mkdir -p /var/log/portage/emerge-info/
-    emerge --info > /var/log/portage/emerge-info/emerge-info-$(date "+%Y%m%d").txt
+    emerge --info > "/var/log/portage/emerge-info/emerge-info-$(date "+%Y%m%d").txt"
   else #we are on a user system
     [ "${NO_SYNC}" = "true" ] || do_sync
     check_profile
@@ -417,15 +488,15 @@ main_checks() {
   PYTHON3=$(emerge --info | grep -oE '^PYTHON_SINGLE_TARGET=".*(python3_[0-9]+\s*)+"' | grep -oE 'python3_[0-9]+' | cut -d\" -f2 | sed 's#_#.#')
   if [ -z "${PYTHON2}" ]; then
     printf "Detected Python 2 is disabled\n"
-    printf "From PYTHON_TARGETS: $(emerge --info | grep '^PYTHON_TARGETS')\n"
+    printf "From PYTHON_TARGETS: %s\n" "$(emerge --info | grep '^PYTHON_TARGETS')"
     printf "This is a good thing :-)\n"
   fi
   if [ -z "${PYTHON3}" ]; then
     printf "Failed to autodetect PYTHON_TARGETS\n"
-    printf "Detected Python 3: ${PYTHON3:-none}\n"
-    printf "From PYTHON_TARGETS: $(emerge --info | grep '^PYTHON_TARGETS')\n"
-    printf "From PYTHON_SINGLE_TARGET: $(emerge --info | grep '^PYTHON_SINGLE_TARGET')\n"
-    printf "This is fatal, python3 support is required, it is $(date +'%Y')\n"
+    printf "Detected Python 3: %s" "${PYTHON3:-none}"
+    printf "From PYTHON_TARGETS: %s\n" "$(emerge --info | grep '^PYTHON_TARGETS')"
+    printf "From PYTHON_SINGLE_TARGET: %s\n" "$(emerge --info | grep '^PYTHON_SINGLE_TARGET')"
+    printf "This is fatal, python3 support is required, it is %s\n" "$(date +'%Y')"
     exit 1
   fi
   "${PYTHON3}" -c "from _multiprocessing import SemLock" || emerge -1 python:"${PYTHON3#python}"
@@ -462,21 +533,13 @@ main_checks() {
 
   #modified from news item "Python ABIFLAGS rebuild needed"
   if [ -n "$(find /usr/lib*/python3* -name '*cpython-3[3-5].so')" ]; then
+    # we want splitting, disable warning
+    # shellcheck disable=2046
     emerge -1v --usepkg=n --buildpkg=y $(find /usr/lib*/python3* -name '*cpython-3[3-5].so')
   fi
   if [ -n "$(find /usr/include/python3.[3-5] -type f 2> /dev/null)" ]; then
     emerge -1v --usepkg=n --buildpkg=y /usr/include/python3.[3-5]
   fi
-
-  #modified from news item gcc-5-new-c++11-abi
-  #gcc_target="x86_64-pc-linux-gnu-5.4.0"
-  #if [ "$(gcc-config -c)" != "${gcc_target}" ]; then
-  #  if gcc-config -l | grep -q "${gcc_target}"; then
-  #    gcc-config "${gcc_target}"
-  #    . /etc/profile
-  #    revdep-rebuild --library 'libstdc++.so.6' -- --buildpkg=y --usepkg=n --exclude gcc
-  #  fi
-  #fi
 
   #migrate what we can from ruby 2.4
   if [ -n "$(portageq match / '<dev-lang/ruby-2.5')" ]; then
@@ -555,10 +618,10 @@ main_checks() {
     emerge --deselect sys-fs/eudev
   fi
   #removeme14 used above before glibc install
-  removeme15=$(portageq match / 'dev-python/prompt-toolkit')
+  removeme15=$(portageq match / 'dev-python/prompt_toolkit')
   if [ -n "${removeme15}" ]; then
-    printf "Removing prompt-toolkit, replaced by prompt_toolkit\n"
-    emerge -C dev-python/prompt-toolkit
+    printf "Removing prompt_toolkit, replaced by prompt-toolkit\n"
+    emerge -C dev-python/prompt_toolkit
   fi
 
   #before main upgrades, let's set a good java-vm
@@ -580,7 +643,9 @@ main_upgrades() {
   set_java #might fail, run it a few times
   set_ruby
 
-  perl-cleaner --modules -- --buildpkg=y || safe_exit
+  if [ -n "$(portageq match / 'app-admin/perl-cleaner')" ]; then
+    perl-cleaner --modules -- --buildpkg=y || safe_exit
+  fi
 
   if ! emerge --deep --update --newuse -kb --changed-deps --newrepo @world; then
     emerge --deep --update --newuse -kb --changed-deps --newrepo --with-bdeps=y @world || safe_exit
@@ -595,6 +660,7 @@ main_upgrades() {
   if [ -n "${clst_target}" ]; then
     mkdir -p /etc/portage/profile
     #add kde
+    # shellcheck disable=2129
     echo 'pentoo/pentoo-desktop kde' >> /etc/portage/profile/package.use
     #required for kde
     echo 'media-libs/mesa wayland' >> /etc/portage/profile/package.use
@@ -624,7 +690,7 @@ main_upgrades() {
 
 mount_boot() {
   #so since portage is no longer allowed to mount /boot, we need to do it
-  if grep '/boot' /etc/fstab | grep -q noauto; then
+  if grep -q '/boot' /etc/fstab && ! mountpoint /boot > /dev/null 2>&1 ; then
     #pretty much going to trust fstab and ignore failures here
     mount /boot
   fi
@@ -632,19 +698,88 @@ mount_boot() {
 
 umount_boot() {
   if grep '/boot' /etc/fstab | grep -q noauto; then
-    #it's set to noauto, so always leave it
+    #it's set to noauto, so always leave it unmounted
     umount /boot
   fi
+}
+
+grub_safety_check() {
+  if [ ! -d /sys/firmware/efi ]; then
+    # Only efi safety checks are implemented
+    return 0
+  else
+    efi_uuid="$(efibootmgr -v | grep -i pentoo | awk -F',' '{print $3}')"
+    mount_point="$(findmnt --source PARTUUID="${efi_uuid}" --output TARGET --noheadings)"
+    if [ ! -d "${mount_point}" ]; then
+      printf "Unable to find mounted efi partition, please report this!!!\n"
+    fi
+  fi
+  # https://www.gentoo.org/support/news-items/2024-02-01-grub-upgrades.html
+  # https://bugs.gentoo.org/925370
+  if [ ! -f '/boot/grub/grub.cfg' ]; then
+    printf "Unable to find /boot/grub/grub.cfg, unable to safety check your config.  Next boot may fail!\n"
+    return 1
+  else
+    if grep -q -- '--is-supported' /boot/grub/grub.cfg; then
+      if [ ! -f '/boot/grub/x86_64-efi/efifwsetup.mod' ]; then
+        printf "Unable to find /boot/grub/x86_64-efi/efifwsetup.mod, unable to safety check your config.  Next boot may fail!\n"
+        return 1
+      else
+        if strings /boot/grub/x86_64-efi/efifwsetup.mod | grep -q -- '--is-supported'; then
+          true
+        else
+          if [ -d "${mount_point}" ] && grub-install --efi-directory="${mount_point}" --recheck; then
+            printf "Successfully reinstalled grub to fix incompatibility in updated version\n"
+          else
+            printf "WARNING WARNING WARNING\n"
+            printf "NEXT BOOT WILL FAIL\n"
+            printf "WARNING WARNING WARNING\n"
+            printf "You MUST reinstall grub before reboot\n"
+            if [ -d "${mount_point}" ]; then
+              printf "Required command is 'grub-install --efi-directory=%s --recheck' as root\n" "${mount_point}"
+            else
+              printf "Required command is 'grub-install --efi-directory=/your_efi_dir_here --recheck' as root\n"
+            fi
+            return 1
+          fi
+        fi
+      fi
+    else
+      # This part of the check passes because we didn't find anything broken yet
+      true
+    fi
+  fi
+
+  # Now we do a stronger check but with a recommendation instead of a dire warning.
+  for grubmod in /boot/grub/*-efi/*.mod; do
+    if ! cmp -s "${grubmod}" "/usr/lib/grub${grubmod##/boot/grub}"; then
+      if [ -d "${mount_point}" ] && grub-install --efi-directory="${mount_point}" --recheck; then
+        printf "Successfully reinstalled grub to fix incompatibility in updated version"
+      else
+        printf "/boot grub module %s is different from system version\n" "$(basename "${grubmod}")"
+        printf "This could lead to boot failure, it is recommended to reinstall grub before reboot\n"
+        if [ -d "${mount_point}" ]; then
+          printf "Suggested command is 'grub-install --efi-directory=%s --recheck' as root\n" "${mount_point}"
+        else
+          printf "Suggested command is 'grub-install --efi-directory=/your_efi_dir_here --recheck' as root\n"
+        fi
+      fi
+    fi
+  done
 }
 
 #execution begins here
 mount_boot
 main_checks
 
-if [ -z "${KERNEL_ONLY}" ]; then
+if [ -z "${KERNEL_ONLY:-}" ]; then
   main_upgrades
 else
-  emerge --update sys-kernel/pentoo-sources sys-kernel/genkernel sys-kernel/linux-firmware sys-firmware/intel-microcode --oneshot || safe_exit
+  emerge --update --newuse --oneshot --changed-deps --newrepo portage || safe_exit
+  if [ -n "$(portageq match / 'sys-boot/grub')" ]; then
+    maybe_grub="sys-boot/grub"
+  fi
+  emerge --update --newuse --oneshot --changed-deps --newrepo --newuse "${maybe_grub:-}" virtual/linux-sources sys-kernel/genkernel sys-kernel/linux-firmware sys-firmware/intel-microcode || safe_exit
 fi
 
 #we need to do the clean BEFORE we drop the extra flags otherwise all the packages we just built are removed
@@ -671,7 +806,6 @@ set_ruby || export WE_FAILED=1
 if portageq list_preserved_libs /; then
   FEATURES="-getbinpkg" emerge @preserved-rebuild --usepkg=n --buildpkg=y || safe_exit
 fi
-umount_boot
 
 if [ -n "${clst_target}" ]; then
   if [ -n "${debugshell}" ]; then
@@ -680,6 +814,8 @@ if [ -n "${clst_target}" ]; then
   etc-update --automode -5 || safe_exit
   fixpackages || safe_exit
   eclean-pkg --unique-use || safe_exit
+  #sometimes binpkgs are size 0, and that's not okay
+  find "$(portageq envvar PKGDIR)" -size 0 -delete
   #this is already run as part of eclean-pkg
   #emaint --fix binhost || safe_exit
   #remove kde/mate use flags, and pentoo-extra
@@ -688,20 +824,31 @@ else
   #clean the user's systems a bit
   eclean-pkg -d -t 1m
   eclean-dist -d -t 1m
+  #sometimes binpkgs are size 0, and that's not okay
+  find "$(portageq envvar PKGDIR)" -size 0 -delete
 fi
 
-if [ -f /usr/local/portage/scripts/bug-461824.sh ]; then
-  /usr/local/portage/scripts/bug-461824.sh
-elif [ -f /var/lib/layman/pentoo/scripts/bug-461824.sh ]; then
-  /var/lib/layman/pentoo/scripts/bug-461824.sh
-elif [ -f /var/db/repos/pentoo/scripts/bug-461824.sh ]; then
-  /var/db/repos/pentoo/scripts/bug-461824.sh
-elif [ -f /var/gentoo/repos/local/scripts/bug-461824.sh ]; then
-  /var/gentoo/repos/local/scripts/bug-461824.sh
+if [ -x "$(portageq get_repo_path / pentoo)/scripts/bug-461824.sh" ]; then
+  "$(portageq get_repo_path / pentoo)/scripts/bug-461824.sh"
 fi
 
+UNSAFE_BOOT="0"
 if [ -z "${clst_target}" ]; then
-  update_kernel
+  update_kernel || WE_FAILED="1"
+  grub_safety_check || UNSAFE_BOOT="1"
+fi
+umount_boot
+
+# Warn users who have way too many kernel sources
+if [ "$(find /usr/src/ -mindepth 1 -maxdepth 1 -type d | grep -c '/usr/src/linux-*')" -gt 2 ]; then
+  printf 'Found more than two sets of kernel sources, you may wish to manually clean out the old ones in "/usr/src/linux-*".\n'
+fi
+
+exit_code="0"
+if [ "${UNSAFE_BOOT}" = "1" ]; then
+  printf "\n\nIssues which may prevent your next boot from working have been detected!\n"
+  printf "Do not reboot without correcting these errors!\n"
+  exit_code="1"
 fi
 if [ "${WE_FAILED}" = "1" ]; then
   printf "\nSomething failed during update. Run pentoo-updater again, if you see\n" 1>&2
@@ -709,5 +856,6 @@ if [ "${WE_FAILED}" = "1" ]; then
   printf "FAILURE FAILURE FAILURE\n\n" 1>&2
   printf "For support via irc or discord you can pastebin your log like this (and share the link in chat):\n"
   printf "wgetpaste -s bpaste /tmp/pentoo-updater.log\n\n"
-  exit 1
+  exit_code="1"
 fi
+exit "${exit_code}"

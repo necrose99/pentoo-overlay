@@ -5,6 +5,9 @@
 #hold it until acceleration works
 #x11-drivers/xf86-video-intel
 
+#ssh-agent vulnerability https://www.openssh.com/releasenotes.html#9.3p2
+<net-misc/openssh-9.3_p2
+
 #force libreoffice update
 <app-office/libreoffice-7
 
@@ -21,23 +24,24 @@ net-wireless/madwifi-ng-tools
 <net-analyzer/wireshark-2.6.3
 
 #force qt update
-<dev-qt/qtprintsupport-5.15.7
-<dev-qt/qtxmlpatterns-5.15.7
-<dev-qt/qtbluetooth-5.15.7
-<dev-qt/qtnetwork-5.15.7
-<dev-qt/qtwidgets-5.15.7
-<dev-qt/qtcharts-5.15.7
-<dev-qt/qtopengl-5.15.7
-<dev-qt/qtcore-5.15.7
-<dev-qt/qtdbus-5.15.7
-<dev-qt/qtgui-5.15.7
-<dev-qt/qtsvg-5.15.7
-<dev-qt/qtwebchannel-5.15.7
-<dev-qt/qtwebsockets-5.15.7
-<dev-qt/qtlocation-5.15.7
-<dev-qt/qtspeech-5.15.7
-<dev-python/pyside2-5.15.7
-<dev-python/shiboken2-5.15.7
+<dev-qt/qtprintsupport-5.15.14
+<dev-qt/qtxmlpatterns-5.15.14
+<dev-qt/qtbluetooth-5.15.14
+<dev-qt/qtnetwork-5.15.14
+<dev-qt/qtwidgets-5.15.14
+<dev-qt/qtcharts-5.15.14
+<dev-qt/qtopengl-5.15.14
+<dev-qt/qtcore-5.15.14
+<dev-qt/qtdbus-5.15.14
+<dev-qt/qtgui-5.15.14
+<dev-qt/qtsvg-5.15.14
+<dev-qt/qtwebchannel-5.15.14
+<dev-qt/qtwebengine-5.15.14
+<dev-qt/qtwebsockets-5.15.14
+<dev-qt/qtlocation-5.15.14
+<dev-qt/qtspeech-5.15.14
+<dev-python/pyside2-5.15.14
+<dev-python/shiboken2-5.15.14
 
 #kill old ruby
 dev-lang/ruby:2.1
@@ -48,12 +52,8 @@ dev-lang/ruby:2.5
 <virtual/rubygems-14
 <dev-ruby/did_you_mean-1.1.0
 
-#mask until rails:6.1 and dev-ruby/act*:6.1 would be stable too
-dev-ruby/activesupport:6.1
-
-#disable sudo
-# https://github.com/rubygems/rubygems/issues/4031
->dev-ruby/bundler-2.2.33-r1
+# must match rails:6.1 and dev-ruby/act*:6.1
+#dev-ruby/activesupport:6.1
 
 #transition from pycrypto to pycryptodome
 dev-python/pycrypto
@@ -64,14 +64,13 @@ x11-libs/wxGTK:2.8
 
 #force base system update
 <sys-apps/keyutils-1.5.9-r3
-<sys-devel/libtool-2.4.3-r2:2
 <sys-apps/attr-2.4.47-r2
 <sys-fs/udev-249.6-r2
 <sys-fs/udev-init-scripts-27
 <dev-lang/perl-5.36
 <sys-devel/gcc-12
-<sys-devel/llvm-14
-<sys-devel/clang-14
+<sys-devel/llvm-15
+<sys-devel/clang-15
 <virtual/libcrypt-2
 <media-libs/harfbuzz-3.1.1
 
@@ -114,6 +113,7 @@ sci-libs/mkl
 
 #help portage know that this old stuff has to go
 <dev-libs/openssl-1.1.1
+<dev-libs/openssl-3
 
 #help upgrade to gnuradio 3.10
 dev-python/cheetah
@@ -122,15 +122,7 @@ dev-python/cheetah
 <net-wireless/gr-osmosdr-0.2.3_p20210128-r1
 
 #no wpe patches yet
->net-dialup/freeradius-3.2.0
-
-# It's a very unstable package
-net-analyzer/osmedeus
-
-# not tested yet... (2019-09-21)
-# more info: https://github.com/pentoo/pentoo-overlay/issues/495
-net-wireless/berate_ap
-net-wireless/wpa_sycophant
+>net-dialup/freeradius-3.2.3
 
 # use a better tool, https://github.com/pentoo/pentoo-overlay/issues/564
 net-misc/rdesktop-brute
@@ -152,9 +144,6 @@ dev-lang/lua:0
 #https://bugs.gentoo.org/816453
 ~media-libs/codec2-1.0.1
 
-#okay so this still doesn't work and seems to be riddled with Internal Compiler Errors
->=sys-devel/gcc-arm-none-eabi-11.2_p202202-r2
-
 #https://github.com/intoolswetrust/jd-cli/issues/81
 >dev-java/jcommander-1.32
 
@@ -175,3 +164,29 @@ dev-lang/lua:0
 #known udev bug, upgrade immediately
 #https://github.com/systemd/systemd/issues/22801
 <sys-apps/systemd-utils-252.5
+
+# Force upgrade of cython
+<dev-python/cython-3.0.0
+
+# Force upgrade of libimobiledevice/usbmuxd
+<app-pda/libimobiledevice-1.3.0-r3
+<app-pda/usbmuxd-1.1.1-r2
+
+# CVE-2023-45866 https://bugs.gentoo.org/919383
+<net-wireless/bluez-5.70-r1
+
+# Force upgrade of protobuf
+#<dev-libs/protobuf-21.12
+
+#CVE 2024-3094
+#While the CVE doesn't affect gentoo, trust level is extremely low.
+#Masking the known affected versions, may expand as information becomes available.
+~app-arch/xz-utils-5.6.0
+~app-arch/xz-utils-5.6.1
+
+#not sure why x86 is pulling in the old version
+#forcing upgrade
+<media-libs/audacity-3.3.3
+
+#force sticky upgrade
+<app-pda/libplist-2.3

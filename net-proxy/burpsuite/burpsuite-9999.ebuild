@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -8,36 +8,39 @@ inherit desktop java-pkg-2 xdg
 DESCRIPTION="Interactive proxy for attacking and debugging web applications"
 HOMEPAGE="https://portswigger.net/burp/"
 
+S=${WORKDIR}
+LICENSE="BURP"
+SLOT="0"
+
 # https://portswigger.net/burp/releases
 # https://portswigger.net/burp/releases/professional/latest
 MY_PV=${PV/_rc/}
-if [[ "${PN}" == *"pro" ]]; then
-	MY_P="burpsuite_pro_v${MY_PV}.jar"
-	SRC_URI="https://portswigger.net/burp/releases/download?product=pro&version=${MY_PV}&type=Jar  -> ${MY_P}"
-else
-	MY_P="burpsuite_community_v${MY_PV}.jar"
-	SRC_URI="https://portswigger.net/burp/releases/download?product=community&version=${MY_PV} -> ${MY_P}"
-fi
+if [ "${PV}" != "9999" ]; then
+	if [[ "${PN}" == *"pro" ]]; then
+		MY_P="burpsuite_pro_v${MY_PV}.jar"
+		SRC_URI="https://portswigger.net/burp/releases/download?product=pro&version=${MY_PV}&type=Jar  -> ${MY_P}"
+	else
+		MY_P="burpsuite_community_v${MY_PV}.jar"
+		SRC_URI="https://portswigger.net/burp/releases/download?product=community&version=${MY_PV} -> ${MY_P}"
+	fi
 
-if [[ "${PV}" == *9999 ]]; then
-	SRC_URI=""
-	KEYWORDS=""
-#	eerror "9999 is a template, do not use it"
-elif [[ "${PV}" == *"_rc" ]]; then
-	KEYWORDS="~amd64 ~x86"
-else
-	KEYWORDS="amd64 x86"
+	if [[ "${PV}" == *"_rc" ]]; then
+		KEYWORDS="~amd64 ~x86"
+	else
+		KEYWORDS="amd64 x86"
+	fi
 fi
-
-LICENSE="BURP"
-SLOT="0"
-IUSE=""
 
 BDEPEND="app-arch/zip"
-DEPEND=""
-RDEPEND=">=virtual/jre-11"
+#java-pkg-2 sets java based on RDEPEND so the java slot in rdepend is used to build
+RDEPEND="virtual/jre:21"
 
-S=${WORKDIR}
+pkg_setup() {
+	if [[ "${PV}" == *9999 ]]; then
+		eerror "9999 is a template, do not use it"
+		die
+	fi
+}
 
 src_unpack() {
 	cp "${DISTDIR}/${A}" "${S}"

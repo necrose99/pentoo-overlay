@@ -5,4 +5,8 @@
 		<email>unknown@pentoo.ch</email>
 		<name>Author Unknown</name>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">MobSF/httptools</remote-id>
+		<remote-id type="pypi">http-tools</remote-id>
+	</upstream>
 </pkgmetadata>

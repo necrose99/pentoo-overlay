@@ -16,7 +16,7 @@ SRC_URI="https://github.com/jitsi/jitsi/archive/refs/tags/${MY_PV}.tar.gz -> ${P
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="autorecording"
 
 CDEPEND="
 	sys-apps/dbus
@@ -37,8 +37,21 @@ EANT_BUILD_TARGET="rebuild"
 
 S="${WORKDIR}/${PN}-${MY_PV}"
 
+PATCHES=(
+	"${FILESDIR}"/autorecording.patch
+)
+
 src_prepare() {
+	if use autorecording; then
+		eapply "${FILESDIR}"/autorecording.patch
+	fi
 	cp lib/accounts.properties.template lib/accounts.properties
+
+	#Patch debian files
+	sed -e "s/_PACKAGE_NAME_/jitsi/" -e "s/_APP_NAME_/jitsi/"  "./resources/install/debian/jitsi.menu.tmpl" > "./jitsi.menu"
+	sed -e "s/_PACKAGE_NAME_/jitsi/" -e "s/_APP_NAME_/jitsi/" "./resources/install/debian/jitsi.1.tmpl" > "./jitsi.1"
+	sed -e "s/_PACKAGE_NAME_/jitsi/" -e "s/_APP_NAME_/jitsi/"  "./resources/install/debian/jitsi.desktop.tmpl" "./jitsi.desktop" > "./jitsi.desktop"
+
 	eapply_user
 }
 
@@ -51,6 +64,21 @@ src_install() {
 	doins -r {lib,sc-bundles}
 	doins ./resources/install/generic/run.sh
 	fperms +x /usr/share/${PN}/run.sh
+
+	#Install menu
+	insinto "/usr/share/menu"
+	doins "./jitsi.menu"
+
+	#Install icons
+	insinto "/usr/share/pixmaps"
+	doins "./resources/install/debian/jitsi-16.xpm" "./resources/install/debian/jitsi-32.xpm" "./resources/install/debian/jitsi.svg"
+
+	#Install man page
+	doman "./jitsi.1"
+
+	#Install desktop entry
+	insinto "/usr/share/applications"
+	doins "./jitsi.desktop"
 
 	newbin - ${PN} <<-EOF
 	#!/bin/sh

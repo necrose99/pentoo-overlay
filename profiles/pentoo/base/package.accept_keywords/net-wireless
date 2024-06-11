@@ -5,8 +5,6 @@ net-wireless/dsd
 
 =net-wireless/trunk-recorder-4*
 
-net-wireless/create_ap
-
 net-wireless/wifipumpkin3
 
 net-wireless/nfcpy
@@ -29,7 +27,7 @@ net-wireless/killerbee
 net-wireless/kalibrate-hackrf **
 net-wireless/op25
 net-wireless/rtl-sdr
-net-wireless/chirp
+net-wireless/gr-mixalot
 
 net-wireless/virtualradar-bin
 net-wireless/uhd
@@ -47,7 +45,7 @@ dev-python/wxpython:4.0
 net-wireless/gr-osmosdr
 net-wireless/gr-iqbal
 ~dev-python/matplotlib-3.1.2
-~net-wireless/gr-paint-0.0_p20220320
+net-wireless/gr-paint
 
 ~net-wireless/orinoco-fwutils-0.3 **
 
@@ -64,11 +62,7 @@ net-wireless/dump1090
 
 net-wireless/dump1090_sdrplus
 
-net-wireless/sdrtrunk-bin
-
 net-wireless/sdrtrunk
-
-net-wireless/wireless-regdb
 
 net-wireless/blueman
 
@@ -97,6 +91,7 @@ net-wireless/kismetmobiledashboard
 net-wireless/multimode
 
 net-wireless/srsran
+net-wireless/srsran2
 
 #below here likely needs cleanup
 #### Gentoo (to be cleaned)
@@ -141,7 +136,6 @@ net-wireless/bluez-firmware
 net-wireless/bluez-hcidump
 net-wireless/bss
 net-wireless/fsam7400
-net-wireless/grimwepa
 net-wireless/haraldscan
 net-wireless/intel-wimax-network-service
 net-wireless/intel-wimax-tools

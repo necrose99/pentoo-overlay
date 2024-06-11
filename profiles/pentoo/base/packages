@@ -22,7 +22,6 @@ virtual/os-headers
 sys-devel/gnuconfig
 app-arch/gzip
 net-misc/iputils
-sys-apps/elfix
 virtual/editor
 sys-apps/file
 sys-apps/busybox
@@ -33,7 +32,7 @@ sys-process/procps
 virtual/pager
 >=sys-apps/findutils-4.4
 sys-apps/net-tools
-*sys-devel/make
+*dev-build/make
 sys-apps/man-pages
 sys-fs/e2fsprogs
 *virtual/package-manager
@@ -54,5 +53,7 @@ app-arch/xz-utils
 app-arch/lbzip2
 app-arch/zstd
 sys-apps/sandbox
+#I don't want portage remerging with other things in parallel, and we use portage
+*sys-apps/portage
 #this is needed for portage-9999 which is sometimes used for testing, like right now
 #dev-vcs/git

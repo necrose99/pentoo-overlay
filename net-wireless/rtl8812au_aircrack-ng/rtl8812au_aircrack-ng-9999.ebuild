@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit linux-mod
+inherit linux-mod-r1
 
 DESCRIPTION="RTL8812AU/21AU and RTL8814AU driver with monitor mode and frame injection"
 HOMEPAGE="https://github.com/aircrack-ng/rtl8812au"
@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/aircrack-ng/rtl8812au.git"
 	EGIT_BRANCH="v5.6.4.2"
 else
-	HASH_COMMIT="e7a4a390ccbdd768411e1b2a8922c47837f76b47"
+	HASH_COMMIT="a842611d74c776749782650d225137e9dbb3ba43"
 	SRC_URI="https://github.com/aircrack-ng/rtl8812au/archive/${HASH_COMMIT}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 x86"
 
@@ -24,27 +24,22 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="kernel_linux"
 
-DEPEND="
-	!!net-wireless/rtl8812au
-	!!net-wireless/rtl8812au_asus
-	!!net-wireless/rtl8812au_astsam"
-
 # compile against selected (not running) target
 pkg_setup() {
 	if use kernel_linux; then
-		BUILD_TARGETS="clean modules"
-		MODULE_NAMES="88XXau(misc:)"
-		BUILD_PARAMS="KVER=${KV_FULL} KSRC=${KERNEL_DIR} RTL8814=1 V=1"
-
-		linux-mod_pkg_setup
+		linux-mod-r1_pkg_setup
 	else
 		die "Could not determine proper ${PN} package"
 	fi
 }
 
 src_prepare() {
-	sed -i 's#CONFIG_80211W = n#CONFIG_80211W = y#' Makefile || die
 	sed -i 's#-DCONFIG_IEEE80211W#-DCONFIG_IEEE80211W -DCONFIG_RTW_80211R#' Makefile || die
-	sed -i 's#CONFIG_RTW_VIRTUAL_INTF = n#CONFIG_RTW_VIRTUAL_INTF = y#' Makefile || die
 	default
+}
+
+src_compile() {
+	local modlist=( 88XXau=misc )
+	local modargs=( KVER="${KV_FULL}" KSRC="${KERNEL_DIR}" )
+	linux-mod-r1_src_compile
 }

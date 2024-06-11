@@ -22,13 +22,6 @@ dev-python/simplekml
 dev-python/pygeoif
 dev-python/fastkml
 
-#qspectrumanalyzer
-~dev-python/pyqtgraph-0.10.0
-dev-python/pyFFTW
-dev-python/qt-py
-dev-python/simplespectral
-dev-python/simplesoapy
-
 #required by veil-evasion
 =dev-python/pyinstaller-3*
 
@@ -41,6 +34,10 @@ dev-python/impacket
 dev-python/pypsrp
 dev-python/lsassy
 dev-python/pywerview
+
+############ Python 3.12 tmp =====================
+~dev-cpp/abseil-cpp-20230125.3-r1
+~net-libs/nodejs-20.12.2
 
 ############ Gentoo unstable ======================
 ~dev-python/ldap3-2.7
@@ -62,7 +59,6 @@ dev-python/pywerview
 #required by mitmproxy
 dev-python/publicsuffix amd64
 dev-python/pyopenssl amd64
-dev-python/protobuf-python amd64
 dev-python/kaitaistruct amd64
 dev-python/mitmproxy_wireguard amd64
 
@@ -176,12 +172,10 @@ dev-python/aiosqlite
 =dev-python/starlette-0.19*
 =dev-python/starlette-0.20*
 =dev-python/starlette-0.21*
-=dev-python/python-multipart-0.0*
 #testing
 dev-python/fastapi
 dev-python/limits
-dev-python/orjson-bin
-=dev-python/aiofiles-22*
+=dev-python/aiofiles-23*
 dev-python/slowapi
 
 #Gentoo unstable
@@ -193,22 +187,6 @@ dev-python/slowapi
 dev-python/aiodns amd64
 ~dev-python/texttable-1.6.2
 dev-python/pycares amd64
-
-#=app-forensics/spiderfoot-2.12.0
-# required by app-forensics/spiderfoot
-~dev-python/adblockparser-0.7
-~dev-python/cheroot-6.5.4
-~dev-python/cherrypy-17.4.1
-~dev-python/jaraco-functools-1.20
-~dev-python/phonenumbers-8.3.1
-~dev-python/portend-2.2
-~dev-python/pygexf-0.2.2
-~dev-python/python-docx-0.8.10
-~dev-python/python-pptx-0.6.18
-~dev-python/python-whois-0.7.2
-~dev-python/tempora-1.14.1
-~dev-python/zc-lockfile-1.4
-~net-libs/stem-1.7.1
 
 #required by net-analyzer/GyoiThon
 ~dev-python/hyperlink-18.0.0
@@ -233,24 +211,6 @@ dev-python/Protego
 #nessus api
 dev-python/nessrest
 
-# old seafile-pro requirements
-#~dev-python/django-redis-4.10.0
-#dev-python/jsonfield
-#dev-python/django-statici18n
-#dev-python/djangorestframework
-#dev-python/django_compressor
-#dev-python/rcssmin
-#dev-python/django-post_office-haiwen
-#dev-python/django-constance-haiwen
-#dev-python/rjsmin
-#dev-python/django-formtools
-#dev-python/python-cas-haiwen
-#dev-python/social-auth-core
-#~dev-python/python3-openid-3.1.0
-#~dev-python/python3-saml-1.9.0
-#dev-python/django-webpack-loader
-#dev-python/captcha
-
 #required by gvm-tools / openvas
 dev-python/python-gvm
 
@@ -268,15 +228,10 @@ dev-python/requests-html
 dev-python/fake-useragent
 dev-python/face_recognition
 dev-python/face_recognition_models
-dev-python/websockets
 dev-python/pyee
 #gentoo unstable
 ~dev-python/cairocffi-0.9.0
 ~dev-python/weasyprint-51
-
-# required by dwarf-debugger (argument)
-~dev-python/requests-2.22.0
-~dev-python/pyperclip-1.7.0
 
 #faraday
 dev-python/webapp2
@@ -310,7 +265,8 @@ dev-python/oscrypto
 dev-python/http-tools
 dev-python/IP2Location
 ~dev-python/wcmatch-8.3
-~dev-python/plotly-5.10.0
+=dev-python/plotly-5*
+#dev-python/tzdata
 
 # required by net-analyzer/s3scanner
 ~dev-python/coloredlogs-10.0
@@ -319,23 +275,18 @@ dev-python/IP2Location
 # required by net-analyzer/cipherscan
 ~dev-python/tlslite-ng-0.7.5
 
-# required by net-analyzer/gitgraber
-~dev-python/python-crontab-20191023
-
-# required by proton
-dev-python/playsound
-
-#wifipumpkin3
+# wifipumpkin3
 ~dev-python/config-0.3.9
 ~dev-python/pygtail-0.7.0
 ~dev-python/libarchive-c-2.7
 ~dev-python/scapy-http-1.8
 ~dev-python/service_identity-16.0.0
-=dev-python/loguru-0.6*
+# androguard
+=dev-python/loguru-0.7*
 
-#required by rfcat
-=dev-python/pyside2-5.14*
-=dev-python/shiboken2-5.14*
+# required by rfcat
+=dev-python/pyside2-5.15*
+=dev-python/shiboken2-5.15*
 
 # requierd by net-analyzer/cottontail
 ~dev-python/verboselogs-1.7
@@ -354,13 +305,16 @@ dev-python/apng
 =dev-python/humanfriendly-9*
 
 app-admin/opensnitch
+# https://github.com/grpc/grpc/issues/33918
 =dev-python/grpcio-tools-1.51*
 
 #empire
-dev-python/jq ~amd64
+<dev-python/jq-1.6 ~amd64
 =dev-python/python-socketio-5*
 =dev-python/python-engineio-4*
+=dev-python/simple-websocket-0.10*
 dev-python/pyvnc
+dev-python/antlr4-python3-runtime
 
 #objection
 =dev-python/semver-2*
@@ -378,9 +332,6 @@ dev-python/pyvnc
 #required by maryan
 =dev-python/cloudscraper-1.2*
 
-# required by dev-util/gef (argument)
-=dev-python/filebytes-0.10*
-
 #sslyze test
 =dev-python/Faker-13.15*
 =dev-python/validators-0.20*
@@ -389,7 +340,34 @@ dev-python/pyvnc
 ~dev-python/cryptography-38.0.1
 
 #dev-python/jsbeautifier
-~dev-python/editorconfig-core-py-0.12.3
+~dev-python/editorconfig-0.12.4
 
 #required by androguard
 dev-python/pydot amd64
+~dev-python/debugpy-1.8.0
+
+
+#required by stable >dev-python/cryptography-40
+~dev-python/fido2-1.1.1
+~dev-python/pyopenssl-23.1.0
+
+# Gentoo unstable for bardapi
+dev-python/browser-cookie3
+
+#nanovna-saver
+~dev-python/PyQt6-6.5.2
+
+# needed for newer dev-python/pyparsing
+~dev-python/matplotlib-3.7.2
+
+dev-python/py-pdf-parser
+=dev-python/wand-0.6*
+
+# required by inquirer3
+dev-python/inquirer3
+~dev-python/humanfriendly-10.0
+~dev-python/coloredlogs-15.0.1
+
+# must be in sync with stable dev-libs/protobuf
+#=dev-python/protobuf-python-4.21*
+

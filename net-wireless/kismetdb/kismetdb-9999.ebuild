@@ -1,9 +1,9 @@
-# Copyright 2019-2022 Gentoo Authors
+# Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 inherit distutils-r1
 
 DESCRIPTION="Kismetdb database log helper library"
@@ -19,9 +19,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE=""
 
 DEPEND="dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/simplekml[${PYTHON_USEDEP}]"
 RDEPEND="${DEPEND}"
-BDEPEND=""

@@ -3,8 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..11} )
-PYTHON_REQ_USE="xml"
+PYTHON_COMPAT=( python3_{10..12} )
+#PYTHON_REQ_USE="xml"
 
 inherit desktop distutils-r1 xdg-utils
 
@@ -32,7 +32,7 @@ RDEPEND="${DEPEND}
 	dev-libs/glib
 	exif? ( media-libs/exiftool )
 	gnome-base/librsvg:2[introspection]
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	nautilus? ( dev-python/nautilus-python )
 	x11-libs/gdk-pixbuf[introspection,jpeg,tiff]"
 

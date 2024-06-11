@@ -1,14 +1,12 @@
-CFLAGS="-Os -mtune=pentium-m -pipe -fomit-frame-pointer"
+CFLAGS="-march=pentium-m -mtune=pentium-m -fomit-frame-pointer"
 CXXFLAGS="${CFLAGS}"
 FFLAGS="${CFLAGS}"
 FCFLAGS="${CFLAGS}"
 
-USE="${USE} sse sse2 mmx cpu_flags_x86_sse cpu_flags_x86_sse2 cpu_flags_x86_mmx cpu_flags_x86_mmxext"
+USE="${USE} cpu_flags_x86_sse cpu_flags_x86_sse2 cpu_flags_x86_mmx cpu_flags_x86_mmxext"
 
 QEMU_SOFTMMU_TARGETS="arm i386"
 QEMU_USER_TARGETS="arm i386"
-
-UNICORN_TARGETS="arm aarch64 x86"
 
 #keystone target
 LLVM_TARGETS="X86"

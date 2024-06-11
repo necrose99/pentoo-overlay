@@ -1,9 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit autotools
+EAPI=8
 
 DESCRIPTION="Calculate the local oscillator frequency offset using GSM stations"
 HOMEPAGE="https://github.com/scateu/kalibrate-hackrf"

@@ -1,23 +1,17 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2024 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=8
 
-DESCRIPTION=""
-HOMEPAGE=""
-SRC_URI=""
-
-LICENSE=""
-SLOT="0"
-KEYWORDS="amd64 arm x86"
-IUSE=""
-
-DEPEND=""
-RDEPEND=""
-PDEPEND="sys-apps/elfix"
+DESCRIPTION="Attempt at applying pax marks effectively"
+HOMEPAGE="https://none.com"
 
 S="${WORKDIR}"
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm x86"
+
+PDEPEND="sys-apps/elfix"
 
 src_install() {
 	dobin "${FILESDIR}"/magic-pax
